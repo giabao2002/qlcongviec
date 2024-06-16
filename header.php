@@ -5,7 +5,23 @@
   date_default_timezone_set("Asia/Manila");
   
   ob_start();
-  $title = isset($_GET['page']) ? ucwords(str_replace("_", ' ', $_GET['page'])) : "Home";
+
+  $pageNames = [
+    "home" => "Trang chủ",
+    "new_project" => "Dự án mới",
+    "project_list" => "Danh sách dự án",
+    "task_list" => "Danh sách công việc",
+    "reports" => "Báo cáo",
+    "new_user" => "Người dùng mới",
+    "user_list" => "Danh sách người dùng",
+
+  ];
+
+    if (isset($_GET['page']) && array_key_exists($_GET['page'], $pageNames)) {
+      $title = $pageNames[$_GET['page']];
+  } else {
+      $title = "Trang chủ";
+  }
   ?>
   <title><?php echo $title ?> | <?php echo 'Quản lý công việc' ?></title>
   <?php ob_end_flush() ?>

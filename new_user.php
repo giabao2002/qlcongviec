@@ -17,7 +17,7 @@
 						</div>
 						<?php if($_SESSION['login_type'] == 1): ?>
 						<div class="form-group">
-							<label for="" class="control-label">User Role</label>
+							<label for="" class="control-label">Vai trò</label>
 							<select name="type" id="type" class="custom-select custom-select-sm">
 								<option value="3" <?php echo isset($type) && $type == 3 ? 'selected' : '' ?>>Nhân viên</option>
 								<option value="2" <?php echo isset($type) && $type == 2 ? 'selected' : '' ?>>Quản lý dự án</option>
@@ -28,10 +28,10 @@
 							<input type="hidden" name="type" value="3">
 						<?php endif; ?>
 						<div class="form-group">
-							<label for="" class="control-label">Avatar</label>
+							<label for="" class="control-label">Ảnh đại diện</label>
 							<div class="custom-file">
 		                      <input type="file" class="custom-file-input" id="customFile" name="img" onchange="displayImg(this,$(this))">
-		                      <label class="custom-file-label" for="customFile">Choose file</label>
+		                      <label class="custom-file-label" for="customFile">Chọn ảnh</label>
 		                    </div>
 						</div>
 						<div class="form-group d-flex justify-content-center align-items-center">
@@ -48,7 +48,7 @@
 						<div class="form-group">
 							<label class="control-label">Mật Khẩu</label>
 							<input type="password" class="form-control form-control-sm" name="password" <?php echo !isset($id) ? "required":'' ?>>
-							<small><i><?php echo isset($id) ? "Leave this blank if you dont want to change you password":'' ?></i></small>
+							<small><i><?php echo isset($id) ? "Để trống mật khẩu này nếu bạn không muốn thay đổi mật khẩu của mình":'' ?></i></small>
 						</div>
 						<div class="form-group">
 							<label class="label control-label"> Nhập lại mật khẩu</label>
@@ -60,7 +60,7 @@
 				<hr>
 				<div class="col-lg-12 text-right justify-content-center d-flex">
 					<button class="btn btn-primary mr-2">Lưu</button>
-					<button class="btn btn-secondary" type="button" onclick="location.href = 'index.php?page=user_list'">Cancel</button>
+					<button class="btn btn-secondary" type="button" onclick="location.href = 'index.php?page=user_list'">Hủy</button>
 				</div>
 			</form>
 		</div>

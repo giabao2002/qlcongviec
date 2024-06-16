@@ -9,12 +9,11 @@
 		<div class="card-body">
 			<table class="table tabe-hover table-condensed" id="list">
 				<colgroup>
-					<col width="5%">
-					<col width="15%">
+					<col width="10%">
+					<col width="20%">
 					<col width="20%">
 					<col width="15%">
 					<col width="15%">
-					<col width="10%">
 					<col width="10%">
 					<col width="10%">
 				</colgroup>
@@ -23,11 +22,10 @@
 						<th class="text-center">#</th>
 						<th>Dự án</th>
 						<th>Công việc</th>
-						<th>Ngày dự án bắt đầu</th>
-						<th>Ngày dự án kết thúc</th>
-						<th>Trạng thái dự án</th>
+						<th>Ngày công việc bắt đầu</th>
+						<th>Ngày công việc kết thúc</th>
 						<th>Trạng thái công việc</th>
-						<th>Action</th>
+						<th>Hoạt động</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -74,23 +72,6 @@
 						</td>
 						<td><b><?php echo date("M d, Y",strtotime($row['start_date'])) ?></b></td>
 						<td><b><?php echo date("M d, Y",strtotime($row['end_date'])) ?></b></td>
-						<td class="text-center">
-							<?php
-							  if($stat[$row['pstatus']] =='Chờ'){
-							  	echo "<span class='badge badge-secondary'>{$stat[$row['pstatus']]}</span>";
-							  }elseif($stat[$row['pstatus']] =='Bắt đầu'){
-							  	echo "<span class='badge badge-primary'>{$stat[$row['pstatus']]}</span>";
-							  }elseif($stat[$row['pstatus']] =='Đang làm'){
-							  	echo "<span class='badge badge-info'>{$stat[$row['pstatus']]}</span>";
-							  }elseif($stat[$row['pstatus']] =='Tạm dừng'){
-							  	echo "<span class='badge badge-warning'>{$stat[$row['pstatus']]}</span>";
-							  }elseif($stat[$row['pstatus']] =='Quá hạn'){
-							  	echo "<span class='badge badge-danger'>{$stat[$row['pstatus']]}</span>";
-							  }elseif($stat[$row['pstatus']] =='Xong'){
-							  	echo "<span class='badge badge-success'>{$stat[$row['pstatus']]}</span>";
-							  }
-							?>
-						</td>
 						<td>
                         	<?php 
                         	if($row['status'] == 1){
@@ -104,7 +85,7 @@
                         </td>
 						<td class="text-center">
 							<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-		                      Action
+		                      Hoạt động
 		                    </button>
 			                    <div class="dropdown-menu" style="">
 			                      <a class="dropdown-item new_productivity" data-pid = '<?php echo $row['pid'] ?>' data-tid = '<?php echo $row['id'] ?>'  data-task = '<?php echo ucwords($row['task']) ?>'  href="javascript:void(0)">Thêm tiến độ</a>

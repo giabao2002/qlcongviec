@@ -14,7 +14,7 @@
 						<th>Tên</th>
 						<th>Email</th>
 						<th>Vai trò</th>
-						<th>Action</th>
+						<th>Hoạt động</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -31,7 +31,7 @@
 						<td><b><?php echo $type[$row['type']] ?></b></td>
 						<td class="text-center">
 							<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-		                      Action
+		                      Hoạt động
 		                    </button>
 		                    <div class="dropdown-menu" styles="">
 		                      <a class="dropdown-item view_user" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Xem</a>

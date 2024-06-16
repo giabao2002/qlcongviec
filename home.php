@@ -33,7 +33,7 @@ if($_SESSION['login_type'] != 1)
         <div class="col-md-8">
         <div class="card card-outline card-success">
           <div class="card-header">
-            <b>Project Progress</b>
+            <b>Tiến trình dự án</b>
           </div>
           <div class="card-body p-0">
             <div class="table-responsive">
@@ -47,9 +47,9 @@ if($_SESSION['login_type'] != 1)
                 </colgroup>
                 <thead>
                   <th>#</th>
-                  <th>Project</th>
-                  <th>Progress</th>
-                  <th>Status</th>
+                  <th>Dự án</th>
+                  <th>Tiến trình</th>
+                  <th>Trạng thái</th>
                   <th></th>
                 </thead>
                 <tbody>

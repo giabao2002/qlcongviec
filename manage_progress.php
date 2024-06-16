@@ -16,7 +16,7 @@ if(isset($_GET['id'])){
 				<div class="col-md-5">
 					<?php if(!isset($_GET['tid'])): ?>
 					 <div class="form-group">
-		              <label for="" class="control-label">Quản lý dự án</label>
+		              <label for="" class="control-label">Quản lý công việc</label>
 		              <select class="form-control form-control-sm select2" name="task_id">
 		              	<option></option>
 		              	<?php 
