@@ -90,8 +90,8 @@
 		                    </button>
 		                    <div class="dropdown-menu" style="">
 		                      <a class="dropdown-item view_project" href="./index.php?page=view_project&id=<?php echo $row['id'] ?>" data-id="<?php echo $row['id'] ?>">Xem</a>
-		                      <div class="dropdown-divider"></div>
 		                      <?php if($_SESSION['login_type'] != 3): ?>
+							  <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item" href="./index.php?page=edit_project&id=<?php echo $row['id'] ?>">Sửa</a>
 		                      <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item delete_project" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Xóa</a>

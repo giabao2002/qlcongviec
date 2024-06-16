@@ -14,7 +14,8 @@
     "reports" => "Báo cáo",
     "new_user" => "Người dùng mới",
     "user_list" => "Danh sách người dùng",
-
+    "edit_project" => "Chỉnh sửa dự án",
+    "edit_user" => "Chỉnh sửa người dùng",
   ];
 
     if (isset($_GET['page']) && array_key_exists($_GET['page'], $pageNames)) {
