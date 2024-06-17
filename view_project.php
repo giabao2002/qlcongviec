@@ -18,8 +18,10 @@ if ($status == 0 && strtotime(date('Y-m-d')) >= strtotime($start_date)) :
 elseif ($status == 0 && strtotime(date('Y-m-d')) > strtotime($end_date)) :
 	$status = 4;
 endif;
-$manager = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where id = $manager_id");
-$manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
+$department = $conn->query("SELECT * FROM department where id = $department_id");
+$department = $department->num_rows > 0 ? $department->fetch_array() : array();
+// $manager = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where id = $manager_id");
+// $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 ?>
 <div class="col-lg-12">
 	<div class="row">
@@ -65,15 +67,13 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 								</dd>
 							</dl>
 							<dl>
-								<dt><b class="border-bottom border-primary">Quản lý dự án</b></dt>
+								<dt><b class="border-bottom border-primary">Phòng ban thực hiện</b></dt>
 								<dd>
-									<?php if (isset($manager['id'])) : ?>
+									<?php if (isset($department['id'])) : ?>
 										<div class="d-flex align-items-center mt-1">
-											<img class="img-circle img-thumbnail p-0 shadow-sm border-info img-sm mr-3" src="assets/uploads/<?php echo $manager['avatar'] ?>" alt="Avatar">
-											<b><?php echo ucwords($manager['name']) ?></b>
+											<!-- <img class="img-circle img-thumbnail p-0 shadow-sm border-info img-sm mr-3" src="assets/uploads/<?php echo $manager['avatar'] ?>" alt="Avatar"> -->
+											<b><?php echo ucwords($department['name']) ?></b>
 										</div>
-									<?php else : ?>
-										<small><i>Quản lý đã bị xóa</i></small>
 									<?php endif; ?>
 								</dd>
 							</dl>
@@ -87,28 +87,47 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 		<div class="col-md-4">
 			<div class="card card-outline card-primary">
 				<div class="card-header">
-					<span><b>Team Member/s:</b></span>
-					<div class="card-tools">
-						<!-- <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="manage_team">Manage</button> -->
-					</div>
+					<span><b>Phòng ban:</b></span>
 				</div>
 				<div class="card-body">
-					<ul class="users-list clearfix">
-						<?php
-						if (!empty($user_ids)) :
-							$members = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where id in ($user_ids) order by concat(firstname,' ',lastname) asc");
-							while ($row = $members->fetch_assoc()) :
-						?>
-								<li>
-									<img src="assets/uploads/<?php echo $row['avatar'] ?>" alt="Ảnh đại diện">
-									<a class="users-list-name" href="javascript:void(0)"><?php echo ucwords($row['name']) ?></a>
-									<!-- <span class="users-list-date">Today</span> -->
-								</li>
-						<?php
-							endwhile;
-						endif;
-						?>
-					</ul>
+					<div>
+						<b>Quản lý</b>
+						<ul class="users-list clearfix">
+							<?php
+							$manager_id = $department['manager_id'];
+							if (!empty($manager_id)) :
+								$manager = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where id = $manager_id");
+								while ($row = $manager->fetch_assoc()) :
+							?>
+									<li>
+										<img src="assets/uploads/<?php echo $row['avatar'] ?>" alt="Ảnh đại diện">
+										<a class="users-list-name" href="javascript:void(0)"><?php echo ucwords($row['name']) ?></a>
+									</li>
+							<?php
+								endwhile;
+							endif;
+							?>
+						</ul>
+					</div>
+					<div>
+						<b>Thành viên</b>
+						<ul class="users-list clearfix">
+							<?php
+							$user_ids = $department['user_ids'];
+							if (!empty($user_ids)) :
+								$members = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where id in ($user_ids) order by concat(firstname,' ',lastname) asc");
+								while ($row = $members->fetch_assoc()) :
+							?>
+									<li>
+										<img src="assets/uploads/<?php echo $row['avatar'] ?>" alt="Ảnh đại diện">
+										<a class="users-list-name" href="javascript:void(0)"><?php echo ucwords($row['name']) ?></a>
+									</li>
+							<?php
+								endwhile;
+							endif;
+							?>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -263,12 +282,13 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 	.truncate {
 		-webkit-line-clamp: 1 !important;
 	}
-	.post > div > .cmt_empty{
+
+	.post>div>.cmt_empty {
 		height: 4vh;
 	}
 
 	@media screen and (max-width: 600px) {
-		.post > div > .cmt_empty{
+		.post>div>.cmt_empty {
 			height: 10vh;
 		}
 	}

@@ -16,6 +16,9 @@
     "user_list" => "Danh sách người dùng",
     "edit_project" => "Chỉnh sửa dự án",
     "edit_user" => "Chỉnh sửa người dùng",
+    "department_list" => "Danh sách phòng ban",
+    "new_department" => "Phòng ban mới",
+    "edit_department" => "Sửa thông tin phòng ban",
   ];
 
     if (isset($_GET['page']) && array_key_exists($_GET['page'], $pageNames)) {
