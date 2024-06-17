@@ -20,7 +20,7 @@
 				<tbody>
 					<?php
 					$i = 1;
-					$type = array('',"Admin","Quản lý dự án","Nhân viên");
+					$type = array('',"Admin","Lãnh đạo","Quản lý dự án","Nhân viên");
 					$qry = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users order by concat(lastname,' ',firstname) asc");
 					while($row= $qry->fetch_assoc()):
 					?>
@@ -66,7 +66,7 @@
 			data:{id:$id},
 			success:function(resp){
 				if(resp==1){
-					alert_toast("Data successfully deleted",'success')
+					alert_toast("Xóa dữ liệu thành công!",'success')
 					setTimeout(function(){
 						location.reload()
 					},1500)

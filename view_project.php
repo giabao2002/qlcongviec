@@ -116,7 +116,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 			<div class="card card-outline card-primary">
 				<div class="card-header">
 					<span><b>Danh sách việc:</b></span>
-					<?php if ($_SESSION['login_type'] != 3) : ?>
+					<?php if ($_SESSION['login_type'] != 4) : ?>
 						<div class="card-tools">
 							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i> Việc mới</button>
 						</div>
@@ -172,8 +172,8 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 											</button>
 											<div class="dropdown-menu" style="">
 												<a class="dropdown-item view_task" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>" data-task="<?php echo $row['task'] ?>">Xem</a>
-												<div class="dropdown-divider"></div>
-												<?php if ($_SESSION['login_type'] != 3) : ?>
+												<?php if ($_SESSION['login_type'] != 4) : ?>
+													<div class="dropdown-divider"></div>
 													<a class="dropdown-item edit_task" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>" data-task="<?php echo $row['task'] ?>">Chỉnh sửa</a>
 													<div class="dropdown-divider"></div>
 													<a class="dropdown-item delete_task" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Xóa</a>
@@ -283,6 +283,9 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 	$('.view_task').click(function() {
 		uni_modal("Chi tiết việc", "view_task.php?id=" + $(this).attr('data-id'), "mid-large")
 	})
+	$('.delete_task').click(function() {
+		_conf("Bạn có muốn xóa công việc này không?", "delete_task", [$(this).attr('data-id')])
+	})
 	$('#new_productivity').click(function() {
 		uni_modal("<i class='fa fa-plus'></i> Tiến độ mới", "manage_progress.php?pid=<?php echo $id ?>", 'large')
 	})
@@ -292,6 +295,26 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 	$('.delete_progress').click(function() {
 		_conf("Bạn có muốn xóa tiến độ này không?", "delete_progress", [$(this).attr('data-id')])
 	})
+
+	function delete_task($id) {
+		start_load()
+		$.ajax({
+			url: 'ajax.php?action=delete_task',
+			method: 'POST',
+			data: {
+				id: $id
+			},
+			success: function(resp) {
+				if (resp == 1) {
+					alert_toast("Dữ liệu xóa thành công!", 'success')
+					setTimeout(function() {
+						location.reload()
+					}, 1500)
+
+				}
+			}
+		})
+	}
 
 	function delete_progress($id) {
 		start_load()

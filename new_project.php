@@ -10,13 +10,13 @@
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="" class="control-label">Tên</label>
-					<input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>">
+					<input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>" required>
 				</div>
 			</div>
           	<div class="col-md-6">
 				<div class="form-group">
 					<label for="">Trạng thái</label>
-					<select name="status" id="status" class="custom-select custom-select-sm">
+					<select name="status" id="status" class="custom-select custom-select-sm" required>
 						<option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Chờ</option>
 						<option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Tạm dừng</option>
 						<option value="5" <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Xong</option>
@@ -28,22 +28,22 @@
 			<div class="col-md-6">
             <div class="form-group">
               <label for="" class="control-label">Ngày bắt đầu</label>
-              <input type="date" class="form-control form-control-sm" autocomplete="off" name="start_date" value="<?php echo isset($start_date) ? date("Y-m-d",strtotime($start_date)) : '' ?>">
+              <input type="date" class="form-control form-control-sm" autocomplete="off" name="start_date" value="<?php echo isset($start_date) ? date("Y-m-d",strtotime($start_date)) : '' ?>" required>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="" class="control-label">Ngày kết thúc</label>
-              <input type="date" class="form-control form-control-sm" autocomplete="off" name="end_date" value="<?php echo isset($end_date) ? date("Y-m-d",strtotime($end_date)) : '' ?>">
+              <input type="date" class="form-control form-control-sm" autocomplete="off" name="end_date" value="<?php echo isset($end_date) ? date("Y-m-d",strtotime($end_date)) : '' ?>" required>
             </div>
           </div>
 		</div>
         <div class="row">
-        	<?php if($_SESSION['login_type'] == 1 ): ?>
+        	<?php if($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2): ?>
            <div class="col-md-6">
             <div class="form-group">
               <label for="" class="control-label">Quản lý dự án</label>
-              <select class="form-control form-control-sm select2" name="manager_id">
+              <select class="form-control form-control-sm select2" name="manager_id" required>
               	<option></option>
               	<?php 
               	$managers = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where type = 2 order by concat(lastname,' ',firstname) asc ");
@@ -60,7 +60,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="" class="control-label">Thành viên dự án</label>
-              <select class="form-control form-control-sm select2" multiple="multiple" name="user_ids[]">
+              <select class="form-control form-control-sm select2" multiple="multiple" name="user_ids[]" required>
               	<option></option>
               	<?php 
               	$employees = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where type = 3 order by concat(lastname,' ',firstname) asc ");
@@ -76,7 +76,7 @@
 			<div class="col-md-10">
 				<div class="form-group">
 					<label for="" class="control-label">Mô tả</label>
-					<textarea name="description" id="" cols="30" rows="10" class="summernote form-control">
+					<textarea name="description" id="" cols="30" rows="10" class="summernote form-control" required>
 						<?php echo isset($description) ? $description : '' ?>
 					</textarea>
 				</div>
@@ -93,25 +93,39 @@
 	</div>
 </div>
 <script>
-	$('#manage-project').submit(function(e){
-		e.preventDefault()
-		start_load()
-		$.ajax({
-			url:'ajax.php?action=save_project',
-			data: new FormData($(this)[0]),
-		    cache: false,
-		    contentType: false,
-		    processData: false,
-		    method: 'POST',
-		    type: 'POST',
-			success:function(resp){
-				if(resp == 1){
-					alert_toast('Lưu dữ liệu thành công',"success");
-					setTimeout(function(){
-						location.href = 'index.php?page=project_list'
-					},2000)
-				}
-			}
-		})
-	})
+$('#manage-project').submit(function(e){
+    e.preventDefault()
+    var form = $(this);
+    
+    // Kiểm tra xem có trường nào để trống hay không
+    var isValid = true;
+    form.find('input, textarea, select').each(function() {
+        if ($(this).prop('required') && $(this).val() == '') {
+            isValid = false;
+        }
+    });
+
+    if (isValid) {
+        start_load()
+        $.ajax({
+            url:'ajax.php?action=save_project',
+            data: new FormData(form[0]),
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            success:function(resp){
+                if(resp == 1){
+                    alert_toast('Lưu dữ liệu thành công',"success");
+                    setTimeout(function(){
+                        location.href = 'index.php?page=project_list'
+                    },2000)
+                }
+            }
+        })
+    } else {
+		alert_toast('Vui lòng nhập đủ thông tin!',"error");
+    }
+})
 </script>

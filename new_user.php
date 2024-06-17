@@ -18,14 +18,14 @@
 						<?php if($_SESSION['login_type'] == 1): ?>
 						<div class="form-group">
 							<label for="" class="control-label">Vai trò</label>
-							<select name="type" id="type" class="custom-select custom-select-sm">
-								<option value="3" <?php echo isset($type) && $type == 3 ? 'selected' : '' ?>>Nhân viên</option>
-								<option value="2" <?php echo isset($type) && $type == 2 ? 'selected' : '' ?>>Quản lý dự án</option>
-								<option value="1" <?php echo isset($type) && $type == 1 ? 'selected' : '' ?>>Admin</option>
+							<select name="type" id="type" class="custom-select custom-select-sm" required>
+								<option value="3" <?php echo isset($type) && $type == 4 ? 'selected' : '' ?>>Nhân viên</option>
+								<option value="2" <?php echo isset($type) && $type == 3 ? 'selected' : '' ?>>Quản lý dự án</option>
+								<option value="1" <?php echo isset($type) && $type == 2 ? 'selected' : '' ?>>Lãnh đạo</option>
 							</select>
 						</div>
 						<?php else: ?>
-							<input type="hidden" name="type" value="3">
+							<input type="hidden" name="type" value="4">
 						<?php endif; ?>
 						<div class="form-group">
 							<label for="" class="control-label">Ảnh đại diện</label>

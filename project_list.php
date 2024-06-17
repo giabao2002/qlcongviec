@@ -2,7 +2,7 @@
 <div class="col-lg-12">
 	<div class="card card-outline card-success">
 		<div class="card-header">
-            <?php if($_SESSION['login_type'] != 3): ?>
+            <?php if($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2): ?>
 			<div class="card-tools">
 				<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm dự án mới</a>
 			</div>
@@ -33,9 +33,9 @@
 					$i = 1;
 					$stat = array("Chờ","Bắt đầu","Đang làm","Tạm dừng","Quá hạn","Xong");
 					$where = "";
-					if($_SESSION['login_type'] == 2){
+					if($_SESSION['login_type'] == 3){
 						$where = " where manager_id = '{$_SESSION['login_id']}' ";
-					}elseif($_SESSION['login_type'] == 3){
+					}elseif($_SESSION['login_type'] == 4){
 						$where = " where concat('[',REPLACE(user_ids,',','],['),']') LIKE '%[{$_SESSION['login_id']}]%' ";
 					}
 					$qry = $conn->query("SELECT * FROM project_list $where order by name asc");
@@ -90,7 +90,7 @@
 		                    </button>
 		                    <div class="dropdown-menu" style="">
 		                      <a class="dropdown-item view_project" href="./index.php?page=view_project&id=<?php echo $row['id'] ?>" data-id="<?php echo $row['id'] ?>">Xem</a>
-		                      <?php if($_SESSION['login_type'] != 3): ?>
+		                      <?php if($_SESSION['login_type'] != 3 && $_SESSION['login_type'] != 4): ?>
 							  <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item" href="./index.php?page=edit_project&id=<?php echo $row['id'] ?>">Sửa</a>
 		                      <div class="dropdown-divider"></div>
@@ -129,7 +129,7 @@
 			data:{id:$id},
 			success:function(resp){
 				if(resp==1){
-					alert_toast("Data successfully deleted",'success')
+					alert_toast("Xóa dữ liệu thành công!",'success')
 					setTimeout(function(){
 						location.reload()
 					},1500)
