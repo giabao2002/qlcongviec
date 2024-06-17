@@ -14,13 +14,13 @@
 						<th>Tên</th>
 						<th>Email</th>
 						<th>Vai trò</th>
-						<th>Action</th>
+						<th>Hoạt động</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
 					$i = 1;
-					$type = array('',"Admin","Quản lý dự án","Nhân viên");
+					$type = array('',"Admin","Lãnh đạo","Quản lý dự án","Nhân viên");
 					$qry = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users order by concat(lastname,' ',firstname) asc");
 					while($row= $qry->fetch_assoc()):
 					?>
@@ -31,7 +31,7 @@
 						<td><b><?php echo $type[$row['type']] ?></b></td>
 						<td class="text-center">
 							<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-		                      Action
+		                      Hoạt động
 		                    </button>
 		                    <div class="dropdown-menu" styles="">
 		                      <a class="dropdown-item view_user" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Xem</a>
@@ -55,7 +55,7 @@
 		uni_modal("<i class='fa fa-id-card'></i> User Details","view_user.php?id="+$(this).attr('data-id'))
 	})
 	$('.delete_user').click(function(){
-	_conf("Are you sure to delete this user?","delete_user",[$(this).attr('data-id')])
+	_conf("Bạn chắc chắn muốn xóa người dùng này?","delete_user",[$(this).attr('data-id')])
 	})
 	})
 	function delete_user($id){
@@ -66,7 +66,7 @@
 			data:{id:$id},
 			success:function(resp){
 				if(resp==1){
-					alert_toast("Data successfully deleted",'success')
+					alert_toast("Xóa dữ liệu thành công!",'success')
 					setTimeout(function(){
 						location.reload()
 					},1500)

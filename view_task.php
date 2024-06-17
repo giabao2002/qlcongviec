@@ -27,7 +27,7 @@ if(isset($_GET['id'])){
 		</dd>
 	</dl>
 	<dl>
-		<dt><b class="border-bottom border-primary">Description</b></dt>
+		<dt><b class="border-bottom border-primary">Mô tả</b></dt>
 		<dd><?php echo html_entity_decode($description) ?></dd>
 	</dl>
 </div>

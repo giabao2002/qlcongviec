@@ -21,7 +21,7 @@ if($action == 'logout'){
 		echo $logout;
 }
 if($action == 'logout2'){
-	$logout = $crud->logout2();
+	$logout = $crud->logout();
 	if($logout)
 		echo $logout;
 }
@@ -80,6 +80,16 @@ if($action == 'get_report'){
 	$get = $crud->get_report();
 	if($get)
 		echo $get;
+}
+if($action == 'save_department'){
+	$save = $crud->save_department();
+	if($save)
+		echo $save;
+}
+if($action == 'delete_department'){
+	$save = $crud->delete_department();
+	if($save)
+		echo $save;
 }
 ob_end_flush();
 ?>

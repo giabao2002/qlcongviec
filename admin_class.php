@@ -238,7 +238,7 @@ Class Action {
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k => $v){
-			if(!in_array($k, array('id','user_ids')) && !is_numeric($k)){
+			if(!in_array($k, array('id')) && !is_numeric($k)){
 				if($k == 'description')
 					$v = htmlentities(str_replace("'","&#x2019;",$v));
 				if(empty($data)){
@@ -248,10 +248,6 @@ Class Action {
 				}
 			}
 		}
-		if(isset($user_ids)){
-			$data .= ", user_ids='".implode(',',$user_ids)."' ";
-		}
-		// echo $data;exit;
 		if(empty($id)){
 			$save = $this->db->query("INSERT INTO project_list set $data");
 		}else{
@@ -348,5 +344,37 @@ Class Action {
 		}
 		return json_encode($data);
 
+	}
+	function save_department(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k => $v){
+			if(!in_array($k, array('id','user_ids')) && !is_numeric($k)){
+				if(empty($data)){
+					$data .= " $k='$v' ";
+				}else{
+					$data .= ", $k='$v' ";
+				}
+			}
+		}
+		if(isset($user_ids)){
+			$data .= ", user_ids='".implode(',',$user_ids)."' ";
+		}
+		if(empty($id)){
+			$save = $this->db->query("INSERT INTO department set $data");
+		}else{
+			$save = $this->db->query("UPDATE department set $data where id = $id");
+		}
+		if($save){
+			return 1;
+		}
+	}
+
+	function delete_department(){
+		extract($_POST);
+		$delete = $this->db->query("DELETE FROM department where id = $id");
+		if($delete){
+			return 1;
+		}
 	}
 }
