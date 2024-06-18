@@ -11,7 +11,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="" class="control-label">Tên</label>
+              <label for="" class="control-label">Tên dự án</label>
               <input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>" required>
             </div>
           </div>
@@ -108,7 +108,7 @@
             alert_toast('Lưu dữ liệu thành công', "success");
             setTimeout(function() {
               location.href = 'index.php?page=project_list'
-            }, 2000)
+            }, 1500)
           }
         }
       })

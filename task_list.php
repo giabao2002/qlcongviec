@@ -4,7 +4,7 @@
 		<div class="card-header">
 			<?php if ($_SESSION['login_type'] != 4 && $_SESSION['login_type'] != 3) : ?>
 				<div class="card-tools">
-					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i>Thêm dự án mới</a>
+					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm dự án</a>
 				</div>
 			<?php endif; ?>
 		</div>
@@ -24,10 +24,10 @@
 						<th class="text-center">#</th>
 						<th>Dự án</th>
 						<th>Công việc</th>
-						<th>Ngày công việc bắt đầu</th>
-						<th>Ngày công việc kết thúc</th>
-						<th>Trạng thái công việc</th>
-						<th>Hoạt động</th>
+						<th>Ngày bắt đầu</th>
+						<th>Ngày kết thúc</th>
+						<th>Trạng thái</th>
+						<th>Hành động</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -82,8 +82,8 @@
 								<p><b><?php echo ucwords($row['task']) ?></b></p>
 								<p class="truncate"><?php echo strip_tags($desc) ?></p>
 							</td>
-							<td><b><?php echo date("M d, Y", strtotime($row['start_date'])) ?></b></td>
-							<td><b><?php echo date("M d, Y", strtotime($row['end_date'])) ?></b></td>
+							<td><b><?php echo date("d/m/Y", strtotime($row['start_date'])) ?></b></td>
+							<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>
 							<td>
 								<?php
 								if ($row['status'] == 1) {
@@ -97,9 +97,11 @@
 							</td>
 							<td class="text-center">
 								<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-									Hoạt động
+									Hành động
 								</button>
 								<div class="dropdown-menu" style="">
+									<a class="dropdown-item view_project" href="./index.php?page=view_task&id=<?php echo $row['id'] ?>" data-id="<?php echo $row['id'] ?>">Xem</a>
+									<div class="dropdown-divider"></div>
 									<a class="dropdown-item new_productivity" data-pid='<?php echo $row['pid'] ?>' data-tid='<?php echo $row['id'] ?>' data-task='<?php echo ucwords($row['task']) ?>' href="javascript:void(0)">Thêm tiến độ</a>
 								</div>
 							</td>

@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
 				<div class="col-md-5">
 					<?php if (!isset($_GET['tid'])) : ?>
 						<div class="form-group">
-							<label for="" class="control-label">Quản lý công việc</label>
+							<label for="" class="control-label">Danh sách công việc</label>
 							<select class="form-control form-control-sm select2" name="task_id" required>
 								<option></option>
 								<?php
@@ -49,7 +49,7 @@ if (isset($_GET['id'])) {
 				</div>
 				<div class="col-md-7">
 					<div class="form-group">
-						<label for="">Mô tả bình luận/tiến độ</label>
+						<label for="">Mô tả tiến độ</label>
 						<textarea name="comment" id="" cols="30" rows="10" class="summernote form-control" required=""><?php echo isset($comment) ? $comment : '' ?></textarea>
 					</div>
 				</div>

@@ -1,8 +1,8 @@
-<?php 
+<?php
 include 'db_connect.php';
-if(isset($_GET['id'])){
-	$qry = $conn->query("SELECT * FROM task_list where id = ".$_GET['id'])->fetch_array();
-	foreach($qry as $k => $v){
+if (isset($_GET['id'])) {
+	$qry = $conn->query("SELECT * FROM task_list where id = " . $_GET['id'])->fetch_array();
+	foreach ($qry as $k => $v) {
 		$$k = $v;
 	}
 }
@@ -33,43 +33,55 @@ if(isset($_GET['id'])){
 </div>
 
 <script>
-	$(document).ready(function(){
+	$(document).ready(function() {
 
 
-	$('.summernote').summernote({
-        height: 200,
-        toolbar: [
-            [ 'style', [ 'style' ] ],
-            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
-            [ 'fontname', [ 'fontname' ] ],
-            [ 'fontsize', [ 'fontsize' ] ],
-            [ 'color', [ 'color' ] ],
-            [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
-            [ 'table', [ 'table' ] ],
-            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
-        ]
-    })
-     })
-    
-    $('#manage-task').submit(function(e){
-    	e.preventDefault()
-    	start_load()
-    	$.ajax({
-    		url:'ajax.php?action=save_task',
+		$('.summernote').summernote({
+			height: 200,
+			toolbar: [
+				['style', ['style']],
+				['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+				['fontname', ['fontname']],
+				['fontsize', ['fontsize']],
+				['color', ['color']],
+				['para', ['ol', 'ul', 'paragraph', 'height']],
+				['table', ['table']],
+				['view', ['undo', 'redo', 'fullscreen', 'codeview', 'help']]
+			]
+		})
+	})
+
+	$('#manage-task').submit(function(e) {
+		e.preventDefault()
+		// Kiểm tra xem có trường nào để trống hay không
+		var form = $(this);
+		var isValid = true;
+		form.find('input, textarea, select').each(function() {
+			if ($(this).prop('required') && $(this).val() == '') {
+				isValid = false;
+			}
+		});
+		if (isValid){
+			start_load()
+		$.ajax({
+			url: 'ajax.php?action=save_task',
 			data: new FormData($(this)[0]),
-		    cache: false,
-		    contentType: false,
-		    processData: false,
-		    method: 'POST',
-		    type: 'POST',
-			success:function(resp){
-				if(resp == 1){
-					alert_toast('Dữ liệu lưu thành công',"success");
-					setTimeout(function(){
+			cache: false,
+			contentType: false,
+			processData: false,
+			method: 'POST',
+			type: 'POST',
+			success: function(resp) {
+				if (resp == 1) {
+					alert_toast('Dữ liệu lưu thành công', "success");
+					setTimeout(function() {
 						location.reload()
-					},1500)
+					}, 1500)
 				}
 			}
-    	})
-    })
+		})
+		    } else {
+      alert_toast('Vui lòng nhập đủ thông tin!', "error");
+    }
+	})
 </script>

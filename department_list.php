@@ -23,7 +23,7 @@
 						<th>Phòng ban</th>
 						<th>Quản lý</th>
 						<th>Thành viên</th>
-						<th>Hoạt động</th>
+						<th>Hành động</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -77,7 +77,7 @@
 
 							<td class="text-center">
 								<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-									Hoạt động
+									Hành động
 								</button>
 								<div class="dropdown-menu">
 									<?php if ($_SESSION['login_type'] != 3 && $_SESSION['login_type'] != 4) : ?>

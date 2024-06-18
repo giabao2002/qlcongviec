@@ -40,11 +40,11 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 						<div class="col-md-6">
 							<dl>
 								<dt><b class="border-bottom border-primary">Ngày bắt đầu</b></dt>
-								<dd><?php echo date("F d, Y", strtotime($start_date)) ?></dd>
+								<dd><?php echo date("d/m/Y", strtotime($start_date)) ?></dd>
 							</dl>
 							<dl>
 								<dt><b class="border-bottom border-primary">Ngày đáo hạn</b></dt>
-								<dd><?php echo date("F d, Y", strtotime($end_date)) ?></dd>
+								<dd><?php echo date("d/m/Y", strtotime($end_date)) ?></dd>
 							</dl>
 							<dl>
 								<dt><b class="border-bottom border-primary">Trạng thái</b></dt>
@@ -134,10 +134,10 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 		<div class="col-md-8">
 			<div class="card card-outline card-primary">
 				<div class="card-header">
-					<span><b>Danh sách việc:</b></span>
+					<span><b>Danh sách công việc:</b></span>
 					<?php if ($_SESSION['login_type'] != 4) : ?>
 						<div class="card-tools">
-							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i> Việc mới</button>
+							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i>Thêm công việc</button>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -156,7 +156,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								<th>Việc</th>
 								<th>Mô tả</th>
 								<th>Trạng thái</th>
-								<th>Hoạt động</th>
+								<th>Hành động</th>
 							</thead>
 							<tbody>
 								<?php
@@ -187,7 +187,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 										</td>
 										<td class="text-center">
 											<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-												Hoạt động
+												Hành động
 											</button>
 											<div class="dropdown-menu" style="">
 												<a class="dropdown-item view_task" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>" data-task="<?php echo $row['task'] ?>">Xem</a>
@@ -214,7 +214,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header">
-					<b>Hoạt động/tiến độ thành viên</b>
+					<b>Tiến độ công việc</b>
 					<div class="card-tools">
 						<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_productivity"><i class="fa fa-plus"></i> Thêm tiến độ</button>
 					</div>
@@ -244,7 +244,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								</span>
 								<span class="description">
 									<span class="fa fa-calendar-day"></span>
-									<span><b><?php echo date('M d, Y', strtotime($row['date'])) ?></b></span>
+									<span><b><?php echo date('d/m/Y', strtotime($row['date'])) ?></b></span>
 									<span class="fa fa-user-clock"></span>
 									<span>Bắt đầu: <b><?php echo date('h:i A', strtotime($row['date'] . ' ' . $row['start_time'])) ?></b></span>
 									<span> | </span>
