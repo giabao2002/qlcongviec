@@ -137,7 +137,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 					<span><b>Danh sách công việc:</b></span>
 					<?php if ($_SESSION['login_type'] != 4) : ?>
 						<div class="card-tools">
-							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i>Thêm công việc</button>
+							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i> Thêm công việc</button>
 						</div>
 					<?php endif; ?>
 				</div>

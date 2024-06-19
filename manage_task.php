@@ -17,9 +17,7 @@ if (isset($_GET['id'])) {
 		</div>
 		<div class="form-group">
 			<label for="">Mô tả</label>
-			<textarea name="description" id="" cols="30" rows="10" class="summernote form-control">
-				<?php echo isset($description) ? $description : '' ?>
-			</textarea>
+			<textarea name="description" id="" cols="30" rows="10" class="summernote form-control"><?php echo isset($description) ? $description : '' ?></textarea>
 		</div>
 		<div class="form-group">
 			<label for="">Trạng thái</label>
@@ -61,27 +59,27 @@ if (isset($_GET['id'])) {
 				isValid = false;
 			}
 		});
-		if (isValid){
+		if (isValid) {
 			start_load()
-		$.ajax({
-			url: 'ajax.php?action=save_task',
-			data: new FormData($(this)[0]),
-			cache: false,
-			contentType: false,
-			processData: false,
-			method: 'POST',
-			type: 'POST',
-			success: function(resp) {
-				if (resp == 1) {
-					alert_toast('Dữ liệu lưu thành công', "success");
-					setTimeout(function() {
-						location.reload()
-					}, 1500)
+			$.ajax({
+				url: 'ajax.php?action=save_task',
+				data: new FormData($(this)[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				method: 'POST',
+				type: 'POST',
+				success: function(resp) {
+					if (resp == 1) {
+						alert_toast('Dữ liệu lưu thành công', "success");
+						setTimeout(function() {
+							location.reload()
+						}, 1500)
+					}
 				}
-			}
-		})
-		    } else {
-      alert_toast('Vui lòng nhập đủ thông tin!', "error");
-    }
+			})
+		} else {
+			alert_toast('Vui lòng nhập đủ thông tin!', "error");
+		}
 	})
 </script>
