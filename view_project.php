@@ -280,8 +280,6 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 									$file = trim($file);
 									if (is_file('assets/pdf/reports/' . $file)) : ?>
 										<a href="<?php echo 'assets/pdf/reports/' . $file ?>" target="_blank"><?php echo $file ?></a><br>
-									<?php else : ?>
-										<i>Trống</i><br>
 								<?php endif;
 								}
 								?>

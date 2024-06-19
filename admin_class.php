@@ -239,11 +239,11 @@ class Action
 			}
 		}
 	}
-	function save_pdf($file, $path)
+	function save_pdf($file, $path, $i = 0)
 	{
 		if (isset($file) && $file['tmp_name'] != '') {
-			$fname = $file['name'];
-			$move = move_uploaded_file($file['tmp_name'], $path . $fname);
+			$fname = $file['name'][$i];
+			$move = move_uploaded_file($file['tmp_name'][$i], $path . $fname);
 			return $move;
 		}
 	}
@@ -253,7 +253,7 @@ class Action
 		extract($_POST);
 		$data = "";
 		foreach ($_POST as $k => $v) {
-			if (!in_array($k, array('id')) && !is_numeric($k)) {
+			if (!in_array($k, array('id', 'pdf_file')) && !is_numeric($k)) {
 				if ($k == 'description')
 					$v = htmlentities(str_replace("'", "&#x2019;", $v));
 				if (empty($data)) {
@@ -263,26 +263,18 @@ class Action
 				}
 			}
 		}
+		$filesName = '';
+		if (isset($_FILES['pdf_file'])) {
+			$pdf_files = $_FILES['pdf_file'];
 
-		$uploaded_files = [];
-		$i = 0;
-		while (isset($_FILES['file' . $i]['name'])) {
-			$file_array = array(
-				'name' => $_FILES['file' . $i]['name'],
-				'type' => $_FILES['file' . $i]['type'],
-				'tmp_name' => $_FILES['file' . $i]['tmp_name'],
-				'error' => $_FILES['file' . $i]['error'],
-				'size' => $_FILES['file' . $i]['size']
-			);
-			$save_pdf_result = $this->save_pdf($file_array, 'assets/pdf/projects/');
-			if ($save_pdf_result) {
-				$uploaded_files[] = $_FILES['file' . $i]['name'];
-			} else {
+			for ($i = 0; $i < count($pdf_files['name']); $i++) {
+				$result = $this->save_pdf($pdf_files, 'assets/pdf/projects/', $i);
+				if ($result) {
+					$filesName .= $pdf_files['name'][$i] . ',';
+				}
 			}
-			$i++;
 		}
-		$data .= ", filename = '" . implode(",", $uploaded_files) . "'";
-
+		$data .= ", filename = '" . $filesName . "'";
 		if (empty($id)) {
 			$save = $this->db->query("INSERT INTO project_list set $data");
 		} else {
@@ -306,7 +298,7 @@ class Action
 		extract($_POST);
 		$data = "";
 		foreach ($_POST as $k => $v) {
-			if (!in_array($k, array('id')) && !is_numeric($k)) {
+			if (!in_array($k, array('id', 'pdf_file')) && !is_numeric($k)) {
 				if ($k == 'description')
 					$v = htmlentities(str_replace("'", "&#x2019;", $v));
 				if (empty($data)) {
@@ -316,24 +308,18 @@ class Action
 				}
 			}
 		}
-		$uploaded_files = [];
-		$i = 0;
-		while (isset($_FILES['file' . $i]['name'])) {
-			$file_array = array(
-				'name' => $_FILES['file' . $i]['name'],
-				'type' => $_FILES['file' . $i]['type'],
-				'tmp_name' => $_FILES['file' . $i]['tmp_name'],
-				'error' => $_FILES['file' . $i]['error'],
-				'size' => $_FILES['file' . $i]['size']
-			);
-			$save_pdf_result = $this->save_pdf($file_array, 'assets/pdf/tasks/');
-			if ($save_pdf_result) {
-				$uploaded_files[] = $_FILES['file' . $i]['name'];
-			} else {
+		$filesName = '';
+		if (isset($_FILES['pdf_file'])) {
+			$pdf_files = $_FILES['pdf_file'];
+
+			for ($i = 0; $i < count($pdf_files['name']); $i++) {
+				$result = $this->save_pdf($pdf_files, 'assets/pdf/tasks/', $i);
+				if ($result) {
+					$filesName .= $pdf_files['name'][$i] . ',';
+				}
 			}
-			$i++;
 		}
-		$data .= ", filename = '" . implode(",", $uploaded_files) . "'";
+		$data .= ", filename = '" . $filesName . "'";
 		if (empty($id)) {
 			$save = $this->db->query("INSERT INTO task_list set $data");
 		} else {
@@ -356,7 +342,7 @@ class Action
 		extract($_POST);
 		$data = "";
 		foreach ($_POST as $k => $v) {
-			if (!in_array($k, array('id')) && !is_numeric($k)) {
+			if (!in_array($k, array('id', 'pdf_file')) && !is_numeric($k)) {
 				if ($k == 'comment')
 					$v = htmlentities(str_replace("'", "&#x2019;", $v));
 				if (empty($data)) {
@@ -369,24 +355,18 @@ class Action
 		$dur = abs(strtotime("2020-01-01 " . $end_time)) - abs(strtotime("2020-01-01 " . $start_time));
 		$dur = $dur / (60 * 60);
 		$data .= ", time_rendered='$dur' ";
-		$uploaded_files = [];
-		$i = 0;
-		while (isset($_FILES['file' . $i]['name'])) {
-			$file_array = array(
-				'name' => $_FILES['file' . $i]['name'],
-				'type' => $_FILES['file' . $i]['type'],
-				'tmp_name' => $_FILES['file' . $i]['tmp_name'],
-				'error' => $_FILES['file' . $i]['error'],
-				'size' => $_FILES['file' . $i]['size']
-			);
-			$save_pdf_result = $this->save_pdf($file_array, 'assets/pdf/reports/');
-			if ($save_pdf_result) {
-				$uploaded_files[] = $_FILES['file' . $i]['name'];
-			} else {
+		$filesName = '';
+		if (isset($_FILES['pdf_file'])) {
+			$pdf_files = $_FILES['pdf_file'];
+
+			for ($i = 0; $i < count($pdf_files['name']); $i++) {
+				$result = $this->save_pdf($pdf_files, 'assets/pdf/reports/', $i);
+				if ($result) {
+					$filesName .= $pdf_files['name'][$i] . ',';
+				}
 			}
-			$i++;
 		}
-		$data .= ", filename = '" . implode(",", $uploaded_files) . "'";
+		$data .= ", filename = '" . $filesName . "'";
 		// echo "INSERT INTO user_productivity set $data"; exit;
 		if (empty($id)) {
 			$data .= ", user_id={$_SESSION['login_id']} ";

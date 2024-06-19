@@ -150,8 +150,9 @@
     if (isValid) {
       start_load()
       let formData = new FormData(form[0]);
+      formData.delete('pdf_file[]'); 
       selectedFiles.forEach((file, index) => {
-        formData.append(`file${index}`, file);
+        formData.append(`pdf_file[]`, file);
       });
 
       $.ajax({

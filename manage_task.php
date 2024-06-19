@@ -113,8 +113,9 @@ if (isset($_GET['id'])) {
 		if (isValid) {
 			start_load()
 			let formData = new FormData(form[0]);
+			formData.delete('pdf_file[]');
 			selectedFiles.forEach((file, index) => {
-				formData.append(`file${index}`, file);
+				formData.append(`pdf_file[]`, file);
 			});
 			$.ajax({
 				url: 'ajax.php?action=save_task',
