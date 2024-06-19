@@ -29,6 +29,14 @@ if (isset($_GET['id'])) {
 				<option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Xong</option>
 			</select>
 		</div>
+		<div class="form-group">
+			<label for="" class="control-label">Tệp pdf</label>
+			<div class="custom-file">
+				<input type="file" class="custom-file-input" name="pdf_file[]" accept=".pdf" multiple>
+				<label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>
+			</div>
+			<div id="file-names" style="margin-top: 10px;"></div>
+		</div>
 	</form>
 </div>
 
@@ -51,6 +59,36 @@ if (isset($_GET['id'])) {
 		})
 	})
 
+	let selectedFiles = [];
+
+	$('.custom-file-input').on('change', function() {
+		var maxSizeMB = 40;
+		var maxSizeBytes = maxSizeMB * 1024 * 1024;
+		var totalSize = 0;
+		selectedFiles = Array.from(this.files);
+		selectedFiles.forEach((file) => {
+			totalSize += file.size;
+		});
+		if (totalSize > maxSizeBytes) {
+			alert_toast('Tổng kích thước tệp không được vượt quá ' + maxSizeMB + 'MB.');
+			this.value = '';
+			selectedFiles = [];
+		} else {
+			let fileNames = selectedFiles.map((file, index) => {
+				return `<div id="file-${index}">
+                        <span>${file.name}</span>
+                        <button style="border: none; background-color: transparent;" type="button" onclick="removeFile(${index})">x</button>
+                    </div>`;
+			});
+			$('#file-names').html(fileNames.join(''));
+		}
+	});
+
+	function removeFile(index) {
+		selectedFiles = selectedFiles.filter((file, i) => i !== index);
+		$(`#file-${index}`).remove();
+	}
+
 	$('#manage-task').submit(function(e) {
 		e.preventDefault()
 		// Kiểm tra xem có trường nào để trống hay không
@@ -60,28 +98,46 @@ if (isset($_GET['id'])) {
 			if ($(this).prop('required') && $(this).val() == '') {
 				isValid = false;
 			}
-		});
-		if (isValid){
-			start_load()
-		$.ajax({
-			url: 'ajax.php?action=save_task',
-			data: new FormData($(this)[0]),
-			cache: false,
-			contentType: false,
-			processData: false,
-			method: 'POST',
-			type: 'POST',
-			success: function(resp) {
-				if (resp == 1) {
-					alert_toast('Dữ liệu lưu thành công', "success");
-					setTimeout(function() {
-						location.reload()
-					}, 1500)
+			if ($(this).prop('name') == 'pdf_file' && $(this).val() != '') {
+				var fileExtension = ['pdf'];
+				var files = $(this)[0].files;
+				for (var i = 0; i < files.length; i++) {
+					if ($.inArray(files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1) {
+						isValid = false;
+						alert_toast('Chỉ cho phép tệp PDF.', 'error');
+						break;
+					}
 				}
 			}
-		})
-		    } else {
-      alert_toast('Vui lòng nhập đủ thông tin!', "error");
-    }
+		});
+		if (isValid) {
+			start_load()
+			let formData = new FormData(form[0]);
+			selectedFiles.forEach((file, index) => {
+				formData.append(`file${index}`, file);
+			});
+			$.ajax({
+				url: 'ajax.php?action=save_task',
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				method: 'POST',
+				type: 'POST',
+				success: function(resp) {
+					if (resp == 1) {
+						alert_toast('Lưu dữ liệu thành công', "success");
+						setTimeout(function() {
+							location.reload();
+						}, 1500)
+					} else {
+						alert_toast("Lưu dữ liệu không thành công", "error");
+						end_load()
+					}
+				}
+			})
+		} else {
+			alert_toast('Vui lòng nhập đủ thông tin!', "error");
+		}
 	})
 </script>

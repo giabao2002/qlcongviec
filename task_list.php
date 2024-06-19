@@ -86,13 +86,10 @@
 							<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>
 							<td>
 								<?php
-								if ($row['status'] == 1) {
-									echo "<span class='badge badge-secondary'>Chờ</span>";
-								} elseif ($row['status'] == 2) {
-									echo "<span class='badge badge-primary'>Đang làm</span>";
-								} elseif ($row['status'] == 3) {
-									echo "<span class='badge badge-success'>Xong</span>";
-								}
+								$startDate = strtotime($row['start_date']);
+								$endDate = strtotime($row['end_date']);
+								$remainingDays = ($endDate - $startDate) / (60 * 60 * 24); // Chuyển đổi giây thành ngày
+								echo "Còn " . $remainingDays . " ngày";
 								?>
 							</td>
 							<td class="text-center">

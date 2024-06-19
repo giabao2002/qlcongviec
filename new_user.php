@@ -129,7 +129,7 @@
 						location.replace('index.php?page=user_list')
 					}, 750)
 				} else if (resp == 2) {
-					$('#msg').html("<div class='alert alert-danger'>Email already exist.</div>");
+					$('#msg').html("<div class='alert alert-danger'>Tài khoản đã tồn tại.</div>");
 					$('[name="email"]').addClass("border-danger")
 					end_load()
 				}

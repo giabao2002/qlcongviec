@@ -33,6 +33,20 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 							<dl>
 								<dt><b class="border-bottom border-primary">Tên dự án</b></dt>
 								<dd><?php echo ucwords($name) ?></dd>
+								<dt><b class="border-bottom border-primary">Tệp tin</b></dt>
+								<dd>
+									<?php
+									$filenames = explode(',', $filename);
+									foreach ($filenames as $file) {
+										$file = trim($file);
+										if (is_file('assets/pdf/projects/' . $file)) : ?>
+											<a href="<?php echo 'assets/pdf/projects/' . $file ?>" target="_blank"><?php echo $file ?></a><br>
+										<?php else : ?>
+											<i>Trống</i><br>
+									<?php endif;
+									}
+									?>
+								</dd>
 								<dt><b class="border-bottom border-primary">Mô tả</b></dt>
 								<dd><?php echo html_entity_decode($description) ?></dd>
 							</dl>
@@ -259,6 +273,19 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 									<p class="cmt_empty"></p>
 								<?php endif; ?>
 							</div>
+							<div>
+								<?php
+								$filenames = explode(',', $filename);
+								foreach ($filenames as $file) {
+									$file = trim($file);
+									if (is_file('assets/pdf/reports/' . $file)) : ?>
+										<a href="<?php echo 'assets/pdf/reports/' . $file ?>" target="_blank"><?php echo $file ?></a><br>
+									<?php else : ?>
+										<i>Trống</i><br>
+								<?php endif;
+								}
+								?>
+							</div>
 						</div>
 						<div class="clearfix"></div>
 					<?php endwhile; ?>
@@ -301,7 +328,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 		uni_modal("Chỉnh sửa việc: " + $(this).attr('data-task'), "manage_task.php?pid=<?php echo $id ?>&id=" + $(this).attr('data-id'), "mid-large")
 	})
 	$('.view_task').click(function() {
-		uni_modal("Chi tiết việc", "view_task.php?id=" + $(this).attr('data-id'), "mid-large")
+		uni_modal("Chi tiết công việc", "view_task.php?id=" + $(this).attr('data-id'), "mid-large")
 	})
 	$('.delete_task').click(function() {
 		_conf("Bạn có muốn xóa công việc này không?", "delete_task", [$(this).attr('data-id')])

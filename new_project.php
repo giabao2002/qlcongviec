@@ -5,7 +5,7 @@
 <div class="col-lg-12">
   <div class="card card-outline card-primary">
     <div class="card-body">
-      <form action="" id="manage-project">
+      <form action="" id="manage-project" enctype="multipart/form-data">
 
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
         <div class="row">
@@ -70,6 +70,18 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-10">
+            <div class="form-group">
+              <label for="" class="control-label">Tệp pdf</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="pdf_file[]" accept=".pdf" multiple>
+                <label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>
+              </div>
+              <div id="file-names" style="margin-top: 10px;"></div>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
     <div class="card-footer border-top border-info">
@@ -81,6 +93,36 @@
   </div>
 </div>
 <script>
+  let selectedFiles = [];
+
+  $('.custom-file-input').on('change', function() {
+    var maxSizeMB = 40;
+    var maxSizeBytes = maxSizeMB * 1024 * 1024;
+    var totalSize = 0;
+    selectedFiles = Array.from(this.files);
+    selectedFiles.forEach((file) => {
+      totalSize += file.size;
+    });
+    if (totalSize > maxSizeBytes) {
+      alert_toast('Tổng kích thước tệp không được vượt quá ' + maxSizeMB + 'MB.');
+      this.value = '';
+      selectedFiles = [];
+    } else {
+      let fileNames = selectedFiles.map((file, index) => {
+        return `<div id="file-${index}">
+                        <span>${file.name}</span>
+                        <button style="border: none; background-color: transparent;" type="button" onclick="removeFile(${index})">x</button>
+                    </div>`;
+      });
+      $('#file-names').html(fileNames.join(''));
+    }
+  });
+
+  function removeFile(index) {
+    selectedFiles = selectedFiles.filter((file, i) => i !== index);
+    $(`#file-${index}`).remove();
+  }
+
   $('#manage-project').submit(function(e) {
     e.preventDefault()
     var form = $(this);
@@ -91,13 +133,30 @@
       if ($(this).prop('required') && $(this).val() == '') {
         isValid = false;
       }
+      if ($(this).prop('name') == 'pdf_file' && $(this).val() != '') {
+        var fileExtension = ['pdf'];
+        var files = $(this)[0].files;
+        for (var i = 0; i < files.length; i++) {
+          if ($.inArray(files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1) {
+            isValid = false;
+            alert_toast('Chỉ cho phép tệp PDF.', 'error');
+            break;
+          }
+        }
+      }
     });
+
 
     if (isValid) {
       start_load()
+      let formData = new FormData(form[0]);
+      selectedFiles.forEach((file, index) => {
+        formData.append(`file${index}`, file);
+      });
+
       $.ajax({
         url: 'ajax.php?action=save_project',
-        data: new FormData(form[0]),
+        data: formData,
         cache: false,
         contentType: false,
         processData: false,
@@ -107,13 +166,15 @@
           if (resp == 1) {
             alert_toast('Lưu dữ liệu thành công', "success");
             setTimeout(function() {
-              location.href = 'index.php?page=project_list'
+              location.replace('index.php?page=project_list')
             }, 1500)
+          } else {
+            alert_toast("Lưu dữ liệu không thành công", "error");
+            console.log(resp);
+            end_load()
           }
-        }
-      })
-    } else {
-      alert_toast('Vui lòng nhập đủ thông tin!', "error");
+        },
+      });
     }
   })
 </script>

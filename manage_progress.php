@@ -46,6 +46,14 @@ if (isset($_GET['id'])) {
 						<label for="">Thời gian kết thúc</label>
 						<input type="time" class="form-control form-control-sm" name="end_time" value="<?php echo isset($end_time) ? date("H:i", strtotime("2020-01-01 " . $end_time)) : '' ?>" required>
 					</div>
+					<div class="form-group">
+						<label for="" class="control-label">Báo cáo (*.pdf)</label>
+						<div class="custom-file">
+							<input type="file" class="custom-file-input" name="pdf_file[]" accept=".pdf" multiple>
+							<label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>
+						</div>
+						<div id="file-names" style="margin-top: 10px;"></div>
+					</div>
 				</div>
 				<div class="col-md-7">
 					<div class="form-group">
@@ -78,6 +86,35 @@ if (isset($_GET['id'])) {
 			width: "100%"
 		});
 	})
+	let selectedFiles = [];
+
+	$('.custom-file-input').on('change', function() {
+		var maxSizeMB = 40;
+		var maxSizeBytes = maxSizeMB * 1024 * 1024;
+		var totalSize = 0;
+		selectedFiles = Array.from(this.files);
+		selectedFiles.forEach((file) => {
+			totalSize += file.size;
+		});
+		if (totalSize > maxSizeBytes) {
+			alert_toast('Tổng kích thước tệp không được vượt quá ' + maxSizeMB + 'MB.');
+			this.value = '';
+			selectedFiles = [];
+		} else {
+			let fileNames = selectedFiles.map((file, index) => {
+				return `<div id="file-${index}">
+                        <span>${file.name}</span>
+                        <button style="border: none; background-color: transparent;" type="button" onclick="removeFile(${index})">x</button>
+                    </div>`;
+			});
+			$('#file-names').html(fileNames.join(''));
+		}
+	});
+
+	function removeFile(index) {
+		selectedFiles = selectedFiles.filter((file, i) => i !== index);
+		$(`#file-${index}`).remove();
+	}
 	$('#manage-progress').submit(function(e) {
 		e.preventDefault()
 		var form = $(this);
@@ -88,13 +125,28 @@ if (isset($_GET['id'])) {
 			if ($(this).prop('required') && $(this).val() == '') {
 				isValid = false;
 			}
+			if ($(this).prop('name') == 'pdf_file' && $(this).val() != '') {
+				var fileExtension = ['pdf'];
+				var files = $(this)[0].files;
+				for (var i = 0; i < files.length; i++) {
+					if ($.inArray(files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1) {
+						isValid = false;
+						alert_toast('Chỉ cho phép tệp PDF.', 'error');
+						break;
+					}
+				}
+			}
 		});
 
 		if (isValid) {
 			start_load()
+			let formData = new FormData(form[0]);
+			selectedFiles.forEach((file, index) => {
+				formData.append(`file${index}`, file);
+			});
 			$.ajax({
 				url: 'ajax.php?action=save_progress',
-				data: new FormData(form[0]),
+				data: formData,
 				cache: false,
 				contentType: false,
 				processData: false,
@@ -106,6 +158,10 @@ if (isset($_GET['id'])) {
 						setTimeout(function() {
 							location.reload()
 						}, 1500)
+					} else {
+						alert_toast("Lưu dữ liệu không thành công", "error");
+						console.log(resp);
+						end_load()
 					}
 				}
 			})
