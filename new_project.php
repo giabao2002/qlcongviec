@@ -1,6 +1,10 @@
-<?php if (!isset($conn)) {
+<?php
+if (!isset($conn)) {
   include 'db_connect.php';
-} ?>
+}
+include 'common.php';
+$file_info_json = getFileInfo($filename, "assets/pdf/projects/");
+?>
 
 <div class="col-lg-12">
   <div class="card card-outline card-primary">
@@ -92,35 +96,32 @@
     </div>
   </div>
 </div>
+<script src="common.js"></script>
 <script>
   let selectedFiles = [];
+  <?php if (isset($file_info_json)) : ?>
+    selectedFiles = <?php echo $file_info_json; ?>;
+  <?php endif; ?>
+
+  if (selectedFiles) {
+    selectedFiles.forEach(createFileFromData);
+    renderPDF(selectedFiles);
+  }
 
   $('.custom-file-input').on('change', function() {
-    var maxSizeMB = 40;
-    var maxSizeBytes = maxSizeMB * 1024 * 1024;
-    var totalSize = 0;
-    selectedFiles = Array.from(this.files);
-    selectedFiles.forEach((file) => {
-      totalSize += file.size;
-    });
-    if (totalSize > maxSizeBytes) {
-      alert_toast('Tổng kích thước tệp không được vượt quá ' + maxSizeMB + 'MB.');
-      this.value = '';
-      selectedFiles = [];
+    var newFiles = Array.from(this.files);
+    newFiles = newFiles.filter(newFile => !selectedFiles.some(selectedFile => selectedFile.name === newFile.name));
+    if (checkFileSize(newFiles, selectedFiles, 40)) {
+      selectedFiles = [...selectedFiles, ...newFiles];
+      renderPDF(selectedFiles);
     } else {
-      let fileNames = selectedFiles.map((file, index) => {
-        return `<div id="file-${index}">
-                        <span>${file.name}</span>
-                        <button style="border: none; background-color: transparent;" type="button" onclick="removeFile(${index})">x</button>
-                    </div>`;
-      });
-      $('#file-names').html(fileNames.join(''));
+      this.value = '';
     }
   });
 
   function removeFile(index) {
-    selectedFiles = selectedFiles.filter((file, i) => i !== index);
-    $(`#file-${index}`).remove();
+    selectedFiles = removeFileFromList(index, selectedFiles);
+    renderPDF(selectedFiles);
   }
 
   $('#manage-project').submit(function(e) {
@@ -150,10 +151,11 @@
     if (isValid) {
       start_load()
       let formData = new FormData(form[0]);
-      formData.delete('pdf_file[]'); 
+      formData.delete('pdf_file[]');
       selectedFiles.forEach((file, index) => {
         formData.append(`pdf_file[]`, file);
       });
+
 
       $.ajax({
         url: 'ajax.php?action=save_project',

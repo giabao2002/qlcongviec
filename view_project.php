@@ -37,6 +37,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								<dd>
 									<?php
 									$filenames = explode(',', $filename);
+									$filenames = array_filter($filenames);
 									foreach ($filenames as $file) {
 										$file = trim($file);
 										if (is_file('assets/pdf/projects/' . $file)) : ?>
@@ -167,7 +168,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 							</colgroup>
 							<thead>
 								<th>#</th>
-								<th>Việc</th>
+								<th>Công việc</th>
 								<th>Mô tả</th>
 								<th>Trạng thái</th>
 								<th>Hành động</th>
@@ -275,7 +276,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 							</div>
 							<div>
 								<?php
-								$filenames = explode(',', $filename);
+								$filenames = explode(',', $row['filename']);
 								foreach ($filenames as $file) {
 									$file = trim($file);
 									if (is_file('assets/pdf/reports/' . $file)) : ?>
@@ -323,7 +324,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 		uni_modal("Thêm việc mới cho <?php echo ucwords($name) ?>", "manage_task.php?pid=<?php echo $id ?>", "mid-large")
 	})
 	$('.edit_task').click(function() {
-		uni_modal("Chỉnh sửa việc: " + $(this).attr('data-task'), "manage_task.php?pid=<?php echo $id ?>&id=" + $(this).attr('data-id'), "mid-large")
+		uni_modal("Chỉnh sửa công việc", "manage_task.php?pid=<?php echo $id ?>&id=" + $(this).attr('data-id'), "mid-large")
 	})
 	$('.view_task').click(function() {
 		uni_modal("Chi tiết công việc", "view_task.php?id=" + $(this).attr('data-id'), "mid-large")

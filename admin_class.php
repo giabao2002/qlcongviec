@@ -266,7 +266,6 @@ class Action
 		$filesName = '';
 		if (isset($_FILES['pdf_file'])) {
 			$pdf_files = $_FILES['pdf_file'];
-
 			for ($i = 0; $i < count($pdf_files['name']); $i++) {
 				$result = $this->save_pdf($pdf_files, 'assets/pdf/projects/', $i);
 				if ($result) {
@@ -311,7 +310,6 @@ class Action
 		$filesName = '';
 		if (isset($_FILES['pdf_file'])) {
 			$pdf_files = $_FILES['pdf_file'];
-
 			for ($i = 0; $i < count($pdf_files['name']); $i++) {
 				$result = $this->save_pdf($pdf_files, 'assets/pdf/tasks/', $i);
 				if ($result) {

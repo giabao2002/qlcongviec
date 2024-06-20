@@ -1,11 +1,13 @@
 <?php
 include 'db_connect.php';
+include 'common.php';
 if (isset($_GET['id'])) {
 	$qry = $conn->query("SELECT * FROM user_productivity where id = " . $_GET['id'])->fetch_array();
 	foreach ($qry as $k => $v) {
 		$$k = $v;
 	}
 }
+$file_info_json = getFileInfo($filename, "assets/pdf/reports/");
 ?>
 <div class="container-fluid">
 	<form action="" id="manage-progress">
@@ -66,6 +68,7 @@ if (isset($_GET['id'])) {
 	</form>
 </div>
 
+<script src="common.js"></script>
 <script>
 	$(document).ready(function() {
 		$('.summernote').summernote({
@@ -87,33 +90,29 @@ if (isset($_GET['id'])) {
 		});
 	})
 	let selectedFiles = [];
+	<?php if (isset($file_info_json)) : ?>
+		selectedFiles = <?php echo $file_info_json; ?>;
+	<?php endif; ?>
+
+	if (selectedFiles) {
+		selectedFiles.forEach(createFileFromData);
+		renderPDF(selectedFiles);
+	}
 
 	$('.custom-file-input').on('change', function() {
-		var maxSizeMB = 40;
-		var maxSizeBytes = maxSizeMB * 1024 * 1024;
-		var totalSize = 0;
-		selectedFiles = Array.from(this.files);
-		selectedFiles.forEach((file) => {
-			totalSize += file.size;
-		});
-		if (totalSize > maxSizeBytes) {
-			alert_toast('Tổng kích thước tệp không được vượt quá ' + maxSizeMB + 'MB.');
-			this.value = '';
-			selectedFiles = [];
+		var newFiles = Array.from(this.files);
+		newFiles = newFiles.filter(newFile => !selectedFiles.some(selectedFile => selectedFile.name === newFile.name));
+		if (checkFileSize(newFiles, selectedFiles, 40)) {
+			selectedFiles = [...selectedFiles, ...newFiles];
+			renderPDF(selectedFiles);
 		} else {
-			let fileNames = selectedFiles.map((file, index) => {
-				return `<div id="file-${index}">
-                        <span>${file.name}</span>
-                        <button style="border: none; background-color: transparent;" type="button" onclick="removeFile(${index})">x</button>
-                    </div>`;
-			});
-			$('#file-names').html(fileNames.join(''));
+			this.value = '';
 		}
 	});
 
 	function removeFile(index) {
-		selectedFiles = selectedFiles.filter((file, i) => i !== index);
-		$(`#file-${index}`).remove();
+		selectedFiles = removeFileFromList(index, selectedFiles);
+		renderPDF(selectedFiles);
 	}
 	$('#manage-progress').submit(function(e) {
 		e.preventDefault()
