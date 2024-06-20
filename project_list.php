@@ -23,7 +23,7 @@
 						<th class="text-center">#</th>
 						<th>Dự án</th>
 						<th>Ngày bắt đầu</th>
-						<th>Ngày đáo hạn</th>
+						<th>Ngày hết hạn</th>
 						<th>Trạng thái</th>
 						<th>Hành động</th>
 					</tr>

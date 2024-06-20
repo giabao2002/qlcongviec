@@ -64,7 +64,7 @@
                   </a>
                   <br>
                   <small>
-                    Đáo hạn: <?php echo date("d/m/Y", strtotime($row['end_date'])) ?>
+                    Ngày hết hạn: <?php echo date("d/m/Y", strtotime($row['end_date'])) ?>
                   </small>
                 </td>
                 <td class="text-center">

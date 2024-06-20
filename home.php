@@ -100,7 +100,7 @@ if ($_SESSION['login_type'] == 3) {
                     </a>
                     <br>
                     <small>
-                      Đáo hạn: <?php echo date("Y-m-d", strtotime($row['end_date'])) ?>
+                      Ngày hết hạn: <?php echo date("Y-m-d", strtotime($row['end_date'])) ?>
                     </small>
                   </td>
                   <td class="project_progress">
