@@ -54,6 +54,7 @@ class Action
 			return 3;
 		}
 	}
+
 	function save_user()
 	{
 		extract($_POST);
@@ -83,6 +84,10 @@ class Action
 		if (empty($id)) {
 			$save = $this->db->query("INSERT INTO users set $data");
 		} else {
+			$old_user_type = $this->db->query("SELECT type FROM users WHERE id = $id")->fetch_object()->type;
+			if ($old_user_type == 3 && $type != 3) {
+				$this->db->query("UPDATE department SET manager_id = NULL WHERE manager_id = $id");
+			}
 			$save = $this->db->query("UPDATE users set $data where id = $id");
 		}
 
