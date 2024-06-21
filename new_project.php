@@ -1,17 +1,23 @@
-<?php if (!isset($conn)) {
+<?php
+if (!isset($conn)) {
   include 'db_connect.php';
-} ?>
+}
+include 'common.php';
+if(isset($filename)){
+  $file_info_json = getFileInfo($filename, "assets/pdf/projects/");
+}
+?>
 
 <div class="col-lg-12">
   <div class="card card-outline card-primary">
     <div class="card-body">
-      <form action="" id="manage-project">
+      <form action="" id="manage-project" enctype="multipart/form-data">
 
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="" class="control-label">Tên</label>
+              <label for="" class="control-label">Tên dự án</label>
               <input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>" required>
             </div>
           </div>
@@ -70,6 +76,18 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-10">
+            <div class="form-group">
+              <label for="" class="control-label">Tệp pdf</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="pdf_file[]" accept=".pdf" multiple>
+                <label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>
+              </div>
+              <div id="file-names" style="margin-top: 10px;"></div>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
     <div class="card-footer border-top border-info">
@@ -80,7 +98,34 @@
     </div>
   </div>
 </div>
+<script src="common.js"></script>
 <script>
+  let selectedFiles = [];
+  <?php if (isset($file_info_json)) : ?>
+    selectedFiles = <?php echo $file_info_json; ?>;
+  <?php endif; ?>
+
+  if (selectedFiles) {
+    selectedFiles.forEach(createFileFromData);
+    renderPDF(selectedFiles);
+  }
+
+  $('.custom-file-input').on('change', function() {
+    var newFiles = Array.from(this.files);
+    newFiles = newFiles.filter(newFile => !selectedFiles.some(selectedFile => selectedFile.name === newFile.name));
+    if (checkFileSize(newFiles, selectedFiles, 40)) {
+      selectedFiles = [...selectedFiles, ...newFiles];
+      renderPDF(selectedFiles);
+    } else {
+      this.value = '';
+    }
+  });
+
+  function removeFile(index) {
+    selectedFiles = removeFileFromList(index, selectedFiles);
+    renderPDF(selectedFiles);
+  }
+
   $('#manage-project').submit(function(e) {
     e.preventDefault()
     var form = $(this);
@@ -91,13 +136,39 @@
       if ($(this).prop('required') && $(this).val() == '') {
         isValid = false;
       }
+      if ($(this).prop('name') == 'pdf_file' && $(this).val() != '') {
+        var fileExtension = ['pdf'];
+        var files = $(this)[0].files;
+        for (var i = 0; i < files.length; i++) {
+          if ($.inArray(files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1) {
+            isValid = false;
+            alert_toast('Chỉ cho phép tệp PDF.', 'error');
+            break;
+          }
+        }
+      }
     });
+
+    var startDate = new Date(form.find('input[name="start_date"]').val());
+    var endDate = new Date(form.find('input[name="end_date"]').val());
+    if (startDate > endDate) {
+        isValid = false;
+        alert_toast('Ngày bắt đầu không thể sau ngày kết thúc.', 'error');
+    }
+
 
     if (isValid) {
       start_load()
+      let formData = new FormData(form[0]);
+      formData.delete('pdf_file[]');
+      selectedFiles.forEach((file, index) => {
+        formData.append(`pdf_file[]`, file);
+      });
+
+
       $.ajax({
         url: 'ajax.php?action=save_project',
-        data: new FormData(form[0]),
+        data: formData,
         cache: false,
         contentType: false,
         processData: false,
@@ -107,13 +178,15 @@
           if (resp == 1) {
             alert_toast('Lưu dữ liệu thành công', "success");
             setTimeout(function() {
-              location.href = 'index.php?page=project_list'
-            }, 2000)
+              location.replace('index.php?page=project_list')
+            }, 1500)
+          } else {
+            alert_toast("Lưu dữ liệu không thành công", "error");
+            console.log(resp);
+            end_load()
           }
-        }
-      })
-    } else {
-      alert_toast('Vui lòng nhập đủ thông tin!', "error");
+        },
+      });
     }
   })
 </script>

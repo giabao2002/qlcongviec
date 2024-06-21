@@ -4,7 +4,7 @@
 		<div class="card-header">
 			<?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) : ?>
 				<div class="card-tools">
-					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm dự án mới</a>
+					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm dự án</a>
 				</div>
 			<?php endif; ?>
 		</div>
@@ -23,9 +23,9 @@
 						<th class="text-center">#</th>
 						<th>Dự án</th>
 						<th>Ngày bắt đầu</th>
-						<th>Ngày đáo hạn</th>
+						<th>Ngày hết hạn</th>
 						<th>Trạng thái</th>
-						<th>Hoạt động</th>
+						<th>Hành động</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -74,9 +74,9 @@
 								<p><b><?php echo ucwords($row['name']) ?></b></p>
 								<p class="truncate"><?php echo strip_tags($desc) ?></p>
 							</td>
-							<td><b><?php echo date("d m, Y", strtotime($row['start_date'])) ?></b></td>
-							<td><b><?php echo date("d m, Y", strtotime($row['end_date'])) ?></b></td>
-							<td class="text-center">
+							<td><b><?php echo date("d/m/Y", strtotime($row['start_date'])) ?></b></td>
+							<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>
+							<td class="">
 								<?php
 								if ($stat[$row['status']] == 'Chờ') {
 									echo "<span class='badge badge-secondary'>{$stat[$row['status']]}</span>";
@@ -95,7 +95,7 @@
 							</td>
 							<td class="text-center">
 								<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-									Hoạt động
+									Hành động
 								</button>
 								<div class="dropdown-menu" style="">
 									<a class="dropdown-item view_project" href="./index.php?page=view_project&id=<?php echo $row['id'] ?>" data-id="<?php echo $row['id'] ?>">Xem</a>

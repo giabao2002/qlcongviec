@@ -46,7 +46,7 @@
               </li>
             </ul>
           </li>
-          <?php if ($_SESSION['login_type'] == 2 || $_SESSION['login_type'] == 1) : ?>
+          <?php if ($_SESSION['login_type'] == 1) : ?>
             <li class="nav-item">
               <a href="#" class="nav-link nav-edit_project nav-view_project">
                 <i class="nav-icon fas fa-building"></i>
@@ -77,7 +77,7 @@
               <p>Công việc</p>
             </a>
           </li>
-          <?php if ($_SESSION['login_type'] != 4) : ?>
+          <?php if ($_SESSION['login_type'] == 1) : ?>
             <li class="nav-item">
               <a href="./index.php?page=reports" class="nav-link nav-reports">
                 <i class="fas fa-th-list nav-icon"></i>

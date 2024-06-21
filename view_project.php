@@ -33,6 +33,21 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 							<dl>
 								<dt><b class="border-bottom border-primary">Tên dự án</b></dt>
 								<dd><?php echo ucwords($name) ?></dd>
+								<dt><b class="border-bottom border-primary">Tệp tin</b></dt>
+								<dd>
+									<?php
+									$filenames = explode(',', $filename);
+									$filenames = array_filter($filenames);
+									foreach ($filenames as $file) {
+										$file = trim($file);
+										if (is_file('assets/pdf/projects/' . $file)) : ?>
+											<a href="<?php echo 'assets/pdf/projects/' . $file ?>" target="_blank"><?php echo $file ?></a><br>
+										<?php else : ?>
+											<i>Trống</i><br>
+									<?php endif;
+									}
+									?>
+								</dd>
 								<dt><b class="border-bottom border-primary">Mô tả</b></dt>
 								<dd><?php echo html_entity_decode($description) ?></dd>
 							</dl>
@@ -40,11 +55,11 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 						<div class="col-md-6">
 							<dl>
 								<dt><b class="border-bottom border-primary">Ngày bắt đầu</b></dt>
-								<dd><?php echo date("F d, Y", strtotime($start_date)) ?></dd>
+								<dd><?php echo date("d/m/Y", strtotime($start_date)) ?></dd>
 							</dl>
 							<dl>
-								<dt><b class="border-bottom border-primary">Ngày đáo hạn</b></dt>
-								<dd><?php echo date("F d, Y", strtotime($end_date)) ?></dd>
+								<dt><b class="border-bottom border-primary">Ngày kết thúc</b></dt>
+								<dd><?php echo date("d/m/Y", strtotime($end_date)) ?></dd>
 							</dl>
 							<dl>
 								<dt><b class="border-bottom border-primary">Trạng thái</b></dt>
@@ -134,10 +149,10 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 		<div class="col-md-8">
 			<div class="card card-outline card-primary">
 				<div class="card-header">
-					<span><b>Danh sách việc:</b></span>
+					<span><b>Danh sách công việc:</b></span>
 					<?php if ($_SESSION['login_type'] != 4) : ?>
 						<div class="card-tools">
-							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i> Việc mới</button>
+							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i>Thêm công việc</button>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -153,10 +168,10 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 							</colgroup>
 							<thead>
 								<th>#</th>
-								<th>Việc</th>
+								<th>Công việc</th>
 								<th>Mô tả</th>
 								<th>Trạng thái</th>
-								<th>Hoạt động</th>
+								<th>Hành động</th>
 							</thead>
 							<tbody>
 								<?php
@@ -187,7 +202,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 										</td>
 										<td class="text-center">
 											<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-												Hoạt động
+												Hành động
 											</button>
 											<div class="dropdown-menu" style="">
 												<a class="dropdown-item view_task" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>" data-task="<?php echo $row['task'] ?>">Xem</a>
@@ -214,7 +229,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header">
-					<b>Hoạt động/tiến độ thành viên</b>
+					<b>Tiến độ công việc</b>
 					<div class="card-tools">
 						<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_productivity"><i class="fa fa-plus"></i> Thêm tiến độ</button>
 					</div>
@@ -244,7 +259,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								</span>
 								<span class="description">
 									<span class="fa fa-calendar-day"></span>
-									<span><b><?php echo date('M d, Y', strtotime($row['date'])) ?></b></span>
+									<span><b><?php echo date('d/m/Y', strtotime($row['date'])) ?></b></span>
 									<span class="fa fa-user-clock"></span>
 									<span>Bắt đầu: <b><?php echo date('h:i A', strtotime($row['date'] . ' ' . $row['start_time'])) ?></b></span>
 									<span> | </span>
@@ -258,6 +273,17 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								<?php else : ?>
 									<p class="cmt_empty"></p>
 								<?php endif; ?>
+							</div>
+							<div>
+								<?php
+								$filenames = explode(',', $row['filename']);
+								foreach ($filenames as $file) {
+									$file = trim($file);
+									if (is_file('assets/pdf/reports/' . $file)) : ?>
+										<a href="<?php echo 'assets/pdf/reports/' . $file ?>" target="_blank"><?php echo $file ?></a><br>
+								<?php endif;
+								}
+								?>
 							</div>
 						</div>
 						<div class="clearfix"></div>
@@ -298,10 +324,10 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 		uni_modal("Thêm việc mới cho <?php echo ucwords($name) ?>", "manage_task.php?pid=<?php echo $id ?>", "mid-large")
 	})
 	$('.edit_task').click(function() {
-		uni_modal("Chỉnh sửa việc: " + $(this).attr('data-task'), "manage_task.php?pid=<?php echo $id ?>&id=" + $(this).attr('data-id'), "mid-large")
+		uni_modal("Chỉnh sửa công việc", "manage_task.php?pid=<?php echo $id ?>&id=" + $(this).attr('data-id'), "mid-large")
 	})
 	$('.view_task').click(function() {
-		uni_modal("Chi tiết việc", "view_task.php?id=" + $(this).attr('data-id'), "mid-large")
+		uni_modal("Chi tiết công việc", "view_task.php?id=" + $(this).attr('data-id'), "mid-large")
 	})
 	$('.delete_task').click(function() {
 		_conf("Bạn có muốn xóa công việc này không?", "delete_task", [$(this).attr('data-id')])

@@ -21,12 +21,6 @@ if ($_SESSION['login_type'] == 3) {
 } elseif ($_SESSION['login_type'] == 4) {
   $where = " where concat('[',REPLACE(user_ids,',','],['),']') LIKE '%[{$_SESSION['login_id']}]%' ";
 }
-$where3 = "";
-if ($_SESSION['login_type'] == 3) {
-  $where3 = " where p.manager_id = '{$_SESSION['login_id']}' ";
-} elseif ($_SESSION['login_type'] == 4) {
-  $where3 = " where concat('[',REPLACE(p.user_ids,',','],['),']') LIKE '%[{$_SESSION['login_id']}]%' ";
-}
 ?>
 
 <div class="row">
@@ -71,9 +65,9 @@ if ($_SESSION['login_type'] == 3) {
                 }
               }
               $department_ids_string = implode(',', $department_ids);
-              $where2 = "WHERE department_id IN ($department_ids_string)";
+              $where2 = "department_id IN ($department_ids_string)";
 
-              $qry = $conn->query("SELECT * FROM project_list $where2 order by name asc");
+              $qry = $conn->query("SELECT * FROM project_list where $where2 order by name asc");
               while ($row = $qry->fetch_assoc()) :
                 $prog = 0;
                 $tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['id']}")->num_rows;
@@ -100,7 +94,7 @@ if ($_SESSION['login_type'] == 3) {
                     </a>
                     <br>
                     <small>
-                      Đáo hạn: <?php echo date("Y-m-d", strtotime($row['end_date'])) ?>
+                      Ngày hết hạn: <?php echo date("Y-m-d", strtotime($row['end_date'])) ?>
                     </small>
                   </td>
                   <td class="project_progress">
@@ -149,8 +143,8 @@ if ($_SESSION['login_type'] == 3) {
       <div class="col-12 col-sm-6 col-md-12">
         <div class="small-box bg-light shadow-sm border">
           <div class="inner">
-            <h3><?php echo $conn->query("SELECT * FROM project_list $where2")->num_rows; ?></h3>
-            <p>Tổng số dự án</p>
+            <h3><?php echo $conn->query("SELECT * FROM project_list where $where2")->num_rows; ?></h3>
+            <p><b>Tổng số dự án</b></p>
           </div>
           <div class="icon">
             <i class="fa fa-layer-group"></i>
@@ -160,8 +154,18 @@ if ($_SESSION['login_type'] == 3) {
       <div class="col-12 col-sm-6 col-md-12">
         <div class="small-box bg-light shadow-sm border">
           <div class="inner">
-            <h3><?php echo $conn->query("SELECT t.*,p.name as pname,p.start_date,p.status as pstatus, p.end_date,p.id as pid FROM task_list t inner join project_list p on p.id = t.project_id $where2")->num_rows; ?></h3>
-            <p>Tổng số công việc</p>
+            <div>
+              <h3><?php echo $conn->query("SELECT t.*,p.name as pname,p.start_date,p.status as pstatus, p.end_date,p.id as pid FROM task_list t inner join project_list p on p.id = t.project_id where $where2")->num_rows; ?></h3>
+              <p><b>Tổng số công việc</b></p>
+            </div>
+            <div>
+              <p>Công việc đã hoàn thành: <?php echo $conn->query("SELECT 1 FROM task_list t INNER JOIN project_list p ON p.id = t.project_id where $where2 AND t.status = 3")->num_rows; ?></p>
+              <p>Công việc sắp đến hạn: <?php echo $conn->query("SELECT 1 FROM task_list t INNER JOIN project_list p ON p.id = t.project_id where $where2 AND t.status != 3 AND DATEDIFF(t.end_date, CURDATE()) BETWEEN 0 AND 1")->num_rows; ?></p>
+              <p>Công việc quá hạn: <?php echo $conn->query("SELECT 1 FROM task_list t INNER JOIN project_list p ON p.id = t.project_id where $where2 AND t.status != 3 AND DATEDIFF(CURDATE(), t.end_date) > 0")->num_rows; ?></p>
+            </div>
+            <div>
+              <a href="./index.php?page=task_list" class="btn btn-primary btn-sm">Chi tiết</a>
+            </div>
           </div>
           <div class="icon">
             <i class="fa fa-tasks"></i>

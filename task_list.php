@@ -4,19 +4,19 @@
 		<div class="card-header">
 			<?php if ($_SESSION['login_type'] != 4 && $_SESSION['login_type'] != 3) : ?>
 				<div class="card-tools">
-					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i>Thêm dự án mới</a>
+					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm dự án</a>
 				</div>
 			<?php endif; ?>
 		</div>
 		<div class="card-body">
 			<table class="table tabe-hover table-condensed" id="list">
 				<colgroup>
-					<col width="10%">
+					<col width="%">
 					<col width="20%">
 					<col width="20%">
 					<col width="15%">
 					<col width="15%">
-					<col width="10%">
+					<col width="15%">
 					<col width="10%">
 				</colgroup>
 				<thead>
@@ -24,10 +24,10 @@
 						<th class="text-center">#</th>
 						<th>Dự án</th>
 						<th>Công việc</th>
-						<th>Ngày công việc bắt đầu</th>
-						<th>Ngày công việc kết thúc</th>
-						<th>Trạng thái công việc</th>
-						<th>Hoạt động</th>
+						<th>Ngày bắt đầu</th>
+						<th>Ngày kết thúc</th>
+						<th>Trạng thái</th>
+						<th>Hành động</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -51,25 +51,25 @@
 					$where2 = "WHERE department_id IN ($department_ids_string)";
 
 					$stat = array("Chờ", "Bắt đầu", "Đang làm", "Tạm dừng", "Quá hạn", "Xong");
-					$qry = $conn->query("SELECT t.*,p.name as pname,p.start_date,p.status as pstatus, p.end_date,p.id as pid FROM task_list t inner join project_list p on p.id = t.project_id $where2 order by p.name asc");
+					$qry = $conn->query("SELECT t.*, t.start_date, t.end_date, p.name as pname, p.status as pstatus, p.id as pid FROM task_list t inner join project_list p on p.id = t.project_id $where2 order by p.name asc");
 					while ($row = $qry->fetch_assoc()) :
 						$trans = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES);
 						unset($trans["\""], $trans["<"], $trans[">"], $trans["<h2"]);
 						$desc = strtr(html_entity_decode($row['description']), $trans);
 						$desc = str_replace(array("<li>", "</li>"), array("", ", "), $desc);
-						$tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']}")->num_rows;
-						$cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']} and status = 3")->num_rows;
-						$prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
-						$prog = $prog > 0 ?  number_format($prog, 2) : $prog;
-						$prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['pid']}")->num_rows;
-						if ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
-							if ($prod  > 0  || $cprog > 0)
-								$row['pstatus'] = 2;
-							else
-								$row['pstatus'] = 1;
-						elseif ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) > strtotime($row['end_date'])) :
-							$row['pstatus'] = 4;
-						endif;
+						// $tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']}")->num_rows;
+						// $cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']} and status = 3")->num_rows;
+						// $prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
+						// $prog = $prog > 0 ?  number_format($prog, 2) : $prog;
+						// $prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['pid']}")->num_rows;
+						// if ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
+						// 	if ($prod  > 0  || $cprog > 0)
+						// 		$row['pstatus'] = 2;
+						// 	else
+						// 		$row['pstatus'] = 1;
+						// elseif ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) > strtotime($row['end_date'])) :
+						// 	$row['pstatus'] = 4;
+						// endif;
 
 
 					?>
@@ -82,24 +82,32 @@
 								<p><b><?php echo ucwords($row['task']) ?></b></p>
 								<p class="truncate"><?php echo strip_tags($desc) ?></p>
 							</td>
-							<td><b><?php echo date("M d, Y", strtotime($row['start_date'])) ?></b></td>
-							<td><b><?php echo date("M d, Y", strtotime($row['end_date'])) ?></b></td>
+							<td><b><?php echo date("d/m/Y", strtotime($row['start_date'])) ?></b></td>
+							<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>
 							<td>
 								<?php
-								if ($row['status'] == 1) {
-									echo "<span class='badge badge-secondary'>Chờ</span>";
-								} elseif ($row['status'] == 2) {
-									echo "<span class='badge badge-primary'>Đang làm</span>";
-								} elseif ($row['status'] == 3) {
-									echo "<span class='badge badge-success'>Xong</span>";
+								if ($row['status'] != 3) {
+									$endDate = strtotime($row['end_date']);
+									$currentDate = strtotime(date("Y-m-d"));
+									$remainingDays = ($endDate - $currentDate) / (60 * 60 * 24); // Chuyển đổi giây thành ngày
+
+									if ($remainingDays < 0) {
+										echo "Quá hạn " . abs($remainingDays) . " ngày";
+									} else {
+										echo "Còn " . $remainingDays . " ngày";
+									}
+								} else {
+									echo "Đã hoàn thành";
 								}
 								?>
 							</td>
 							<td class="text-center">
 								<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-									Hoạt động
+									Hành động
 								</button>
 								<div class="dropdown-menu" style="">
+									<a class="dropdown-item view_project" href="./index.php?page=view_task&id=<?php echo $row['id'] ?>" data-id="<?php echo $row['id'] ?>">Xem</a>
+									<div class="dropdown-divider"></div>
 									<a class="dropdown-item new_productivity" data-pid='<?php echo $row['pid'] ?>' data-tid='<?php echo $row['id'] ?>' data-task='<?php echo ucwords($row['task']) ?>' href="javascript:void(0)">Thêm tiến độ</a>
 								</div>
 							</td>

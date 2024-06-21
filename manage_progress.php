@@ -1,10 +1,14 @@
 <?php
 include 'db_connect.php';
+include 'common.php';
 if (isset($_GET['id'])) {
 	$qry = $conn->query("SELECT * FROM user_productivity where id = " . $_GET['id'])->fetch_array();
 	foreach ($qry as $k => $v) {
 		$$k = $v;
 	}
+}
+if (isset($filename)) {
+	$file_info_json = getFileInfo($filename, "assets/pdf/reports/");
 }
 ?>
 <div class="container-fluid">
@@ -16,14 +20,14 @@ if (isset($_GET['id'])) {
 				<div class="col-md-5">
 					<?php if (!isset($_GET['tid'])) : ?>
 						<div class="form-group">
-							<label for="" class="control-label">Quản lý công việc</label>
-							<select class="form-control form-control-sm select2" name="task_id" required>
+							<label for="" class="control-label">Danh sách công việc</label>
+							<select class="form-control form-control-sm select2" name="task_id" id="task_id" required>
 								<option></option>
 								<?php
 								$tasks = $conn->query("SELECT * FROM task_list where project_id = {$_GET['pid']} order by task asc ");
 								while ($row = $tasks->fetch_assoc()) :
 								?>
-									<option value="<?php echo $row['id'] ?>" <?php echo isset($task_id) && $task_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['task']) ?></option>
+									<option value="<?php echo $row['id'] ?>" data-start-date="<?php echo $row['start_date']; ?>" data-end-date="<?php echo $row['end_date']; ?>" <?php echo isset($task_id) && $task_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['task']) ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -46,10 +50,18 @@ if (isset($_GET['id'])) {
 						<label for="">Thời gian kết thúc</label>
 						<input type="time" class="form-control form-control-sm" name="end_time" value="<?php echo isset($end_time) ? date("H:i", strtotime("2020-01-01 " . $end_time)) : '' ?>" required>
 					</div>
+					<div class="form-group">
+						<label for="" class="control-label">Báo cáo (*.pdf)</label>
+						<div class="custom-file">
+							<input type="file" class="custom-file-input" name="pdf_file[]" accept=".pdf" multiple>
+							<label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>
+						</div>
+						<div id="file-names" style="margin-top: 10px;"></div>
+					</div>
 				</div>
 				<div class="col-md-7">
 					<div class="form-group">
-						<label for="">Mô tả bình luận/tiến độ</label>
+						<label for="">Mô tả tiến độ</label>
 						<textarea name="comment" id="" cols="30" rows="10" class="summernote form-control" required=""><?php echo isset($comment) ? $comment : '' ?></textarea>
 					</div>
 				</div>
@@ -58,7 +70,15 @@ if (isset($_GET['id'])) {
 	</form>
 </div>
 
+<script src="common.js"></script>
 <script>
+	$('#task_id').on('change', function() {
+		var selectedOption = this.options[this.selectedIndex];
+		var startDate = selectedOption.getAttribute('data-start-date');
+		var endDate = selectedOption.getAttribute('data-end-date');
+		document.querySelector('input[name="date"]').min = startDate;
+		document.querySelector('input[name="date"]').max = endDate;
+	});
 	$(document).ready(function() {
 		$('.summernote').summernote({
 			height: 200,
@@ -78,6 +98,31 @@ if (isset($_GET['id'])) {
 			width: "100%"
 		});
 	})
+	let selectedFiles = [];
+	<?php if (isset($file_info_json)) : ?>
+		selectedFiles = <?php echo $file_info_json; ?>;
+	<?php endif; ?>
+
+	if (selectedFiles) {
+		selectedFiles.forEach(createFileFromData);
+		renderPDF(selectedFiles);
+	}
+
+	$('.custom-file-input').on('change', function() {
+		var newFiles = Array.from(this.files);
+		newFiles = newFiles.filter(newFile => !selectedFiles.some(selectedFile => selectedFile.name === newFile.name));
+		if (checkFileSize(newFiles, selectedFiles, 40)) {
+			selectedFiles = [...selectedFiles, ...newFiles];
+			renderPDF(selectedFiles);
+		} else {
+			this.value = '';
+		}
+	});
+
+	function removeFile(index) {
+		selectedFiles = removeFileFromList(index, selectedFiles);
+		renderPDF(selectedFiles);
+	}
 	$('#manage-progress').submit(function(e) {
 		e.preventDefault()
 		var form = $(this);
@@ -88,13 +133,29 @@ if (isset($_GET['id'])) {
 			if ($(this).prop('required') && $(this).val() == '') {
 				isValid = false;
 			}
+			if ($(this).prop('name') == 'pdf_file' && $(this).val() != '') {
+				var fileExtension = ['pdf'];
+				var files = $(this)[0].files;
+				for (var i = 0; i < files.length; i++) {
+					if ($.inArray(files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1) {
+						isValid = false;
+						alert_toast('Chỉ cho phép tệp PDF.', 'error');
+						break;
+					}
+				}
+			}
 		});
 
 		if (isValid) {
 			start_load()
+			let formData = new FormData(form[0]);
+			formData.delete('pdf_file[]');
+			selectedFiles.forEach((file, index) => {
+				formData.append(`pdf_file[]`, file);
+			});
 			$.ajax({
 				url: 'ajax.php?action=save_progress',
-				data: new FormData(form[0]),
+				data: formData,
 				cache: false,
 				contentType: false,
 				processData: false,
@@ -106,6 +167,10 @@ if (isset($_GET['id'])) {
 						setTimeout(function() {
 							location.reload()
 						}, 1500)
+					} else {
+						alert_toast("Lưu dữ liệu không thành công", "error");
+						console.log(resp);
+						end_load()
 					}
 				}
 			})
