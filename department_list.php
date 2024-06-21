@@ -19,7 +19,7 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th class="text-center">#</th>
+						<th class="text-center">STT</th>
 						<th>Phòng ban</th>
 						<th>Quản lý</th>
 						<th>Thành viên</th>

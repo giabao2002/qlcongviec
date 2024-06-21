@@ -21,7 +21,7 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th class="text-center">#</th>
+						<th class="text-center">STT</th>
 						<th>Dự án</th>
 						<th>Công việc</th>
 						<th>Ngày bắt đầu</th>

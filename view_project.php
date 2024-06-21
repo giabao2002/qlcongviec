@@ -153,7 +153,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 					<span><b>Danh sách công việc:</b></span>
 					<?php if ($_SESSION['login_type'] != 4) : ?>
 						<div class="card-tools">
-							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i>Thêm công việc</button>
+							<button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i class="fa fa-plus"></i> Thêm công việc</button>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -322,7 +322,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 </style>
 <script>
 	$('#new_task').click(function() {
-		uni_modal("Thêm việc mới cho <?php echo ucwords($name) ?>", "manage_task.php?pid=<?php echo $id ?>", "mid-large")
+		uni_modal("Thêm công việc mới cho <?php echo ucwords($name) ?>", "manage_task.php?pid=<?php echo $id ?>", "mid-large")
 	})
 	$('.edit_task').click(function() {
 		uni_modal("Chỉnh sửa công việc", "manage_task.php?pid=<?php echo $id ?>&id=" + $(this).attr('data-id'), "mid-large")
