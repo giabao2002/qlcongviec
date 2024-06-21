@@ -87,6 +87,14 @@ class Action
 			$old_user_type = $this->db->query("SELECT type FROM users WHERE id = $id")->fetch_object()->type;
 			if ($old_user_type == 3 && $type != 3) {
 				$this->db->query("UPDATE department SET manager_id = NULL WHERE manager_id = $id");
+			} elseif ($old_user_type == 4 && $type != 4) {
+				$qry = $this->db->query("SELECT * FROM department WHERE FIND_IN_SET($id, user_ids)")->fetch_object();
+				if($qry){
+					$user_ids = explode(',', $qry->user_ids);
+					$key = array_search($id, $user_ids);
+					unset($user_ids[$key]);
+					$this->db->query("UPDATE department SET user_ids = '".implode(',', $user_ids)."' WHERE id = $qry->id");
+				}
 			}
 			$save = $this->db->query("UPDATE users set $data where id = $id");
 		}
