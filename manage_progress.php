@@ -51,7 +51,7 @@ if (isset($filename)) {
 						<input type="time" class="form-control form-control-sm" name="end_time" value="<?php echo isset($end_time) ? date("H:i", strtotime("2020-01-01 " . $end_time)) : '' ?>" required>
 					</div>
 					<div class="form-group">
-						<label for="" class="control-label">Báo cáo (*.pdf)</label>
+						<label for="" class="control-label">Tệp đính kèm</label>
 						<div class="custom-file">
 							<input type="file" class="custom-file-input" name="pdf_file[]" multiple>
 							<label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>

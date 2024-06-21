@@ -76,7 +76,7 @@
                   <?php echo number_format($cprog) ?>
                 </td>
                 <td class="text-center">
-                  <?php echo number_format($dur) . ' Hr/s.' ?>
+                  <?php echo number_format($dur ?? 0) . ' Hr/s.' ?>
                 </td>
                 <td class="project_progress">
                   <div class="progress progress-sm">
