@@ -10,7 +10,7 @@
 			<table class="table tabe-hover table-bordered" id="list">
 				<thead>
 					<tr>
-						<th class="text-center">#</th>
+						<th class="text-center">STT</th>
 						<th>Tên</th>
 						<th>Email</th>
 						<th>Vai trò</th>

@@ -2,9 +2,9 @@
     <div class="dropdown">
       <a href="./" class="brand-link">
         <?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) : ?>
-          <h3 class="text-center p-0 m-0"><b>ADMIN</b></h3>
+          <h3 class="text-center p-0 m-0"><b>Quản trị</b></h3>
         <?php else : ?>
-          <h3 class="text-center p-0 m-0"><b>USER</b></h3>
+          <h3 class="text-center p-0 m-0"><b>Phòng ban</b></h3>
         <?php endif; ?>
 
       </a>

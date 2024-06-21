@@ -10,15 +10,17 @@
     <div class="card-body p-0">
       <div class="table-responsive" id="printable">
         <table class="table m-0 table-bordered">
-          <!--  <colgroup>
-                  <col width="5%">
-                  <col width="30%">
-                  <col width="35%">
-                  <col width="15%">
-                  <col width="15%">
-                </colgroup> -->
+          <colgroup>
+            <col width="5%">
+            <col width="20%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+          </colgroup>
           <thead>
-            <th>#</th>
+            <th>STT</th>
             <th>Dự án</th>
             <th>Công việc</th>
             <th>Công việc đã xong</th>
