@@ -53,7 +53,7 @@ if (isset($filename)) {
 					<div class="form-group">
 						<label for="" class="control-label">Báo cáo (*.pdf)</label>
 						<div class="custom-file">
-							<input type="file" class="custom-file-input" name="pdf_file[]" accept=".pdf" multiple>
+							<input type="file" class="custom-file-input" name="pdf_file[]" multiple>
 							<label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>
 						</div>
 						<div id="file-names" style="margin-top: 10px;"></div>
@@ -132,17 +132,6 @@ if (isset($filename)) {
 		form.find('input, textarea, select').each(function() {
 			if ($(this).prop('required') && $(this).val() == '') {
 				isValid = false;
-			}
-			if ($(this).prop('name') == 'pdf_file' && $(this).val() != '') {
-				var fileExtension = ['pdf'];
-				var files = $(this)[0].files;
-				for (var i = 0; i < files.length; i++) {
-					if ($.inArray(files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1) {
-						isValid = false;
-						alert_toast('Chỉ cho phép tệp PDF.', 'error');
-						break;
-					}
-				}
 			}
 		});
 

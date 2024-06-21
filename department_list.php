@@ -44,7 +44,7 @@
 									$manager = $managerQuery->num_rows > 0 ? $managerQuery->fetch_array() : array();
 								} else {
 									$manager = array();
-									echo "Xảy ra lỗi! ";
+									echo "";
 								}
 								?>
 								<?php if (isset($manager['id'])) : ?>

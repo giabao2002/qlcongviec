@@ -118,10 +118,11 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 										<img src="assets/uploads/<?php echo $row['avatar'] ?>" alt="Ảnh đại diện">
 										<a class="users-list-name" href="javascript:void(0)"><?php echo ucwords($row['name']) ?></a>
 									</li>
-							<?php
+								<?php
 								endwhile;
-							endif;
-							?>
+							else : ?>
+								<p>Trống</p>
+							<?php endif; ?>
 						</ul>
 					</div>
 					<div>
