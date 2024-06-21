@@ -11,12 +11,12 @@
 		<div class="card-body">
 			<table class="table tabe-hover table-condensed" id="list">
 				<colgroup>
-					<col width="10%">
+					<col width="%">
 					<col width="20%">
 					<col width="20%">
 					<col width="15%">
 					<col width="15%">
-					<col width="10%">
+					<col width="15%">
 					<col width="10%">
 				</colgroup>
 				<thead>
@@ -57,19 +57,19 @@
 						unset($trans["\""], $trans["<"], $trans[">"], $trans["<h2"]);
 						$desc = strtr(html_entity_decode($row['description']), $trans);
 						$desc = str_replace(array("<li>", "</li>"), array("", ", "), $desc);
-						$tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']}")->num_rows;
-						$cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']} and status = 3")->num_rows;
-						$prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
-						$prog = $prog > 0 ?  number_format($prog, 2) : $prog;
-						$prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['pid']}")->num_rows;
-						if ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
-							if ($prod  > 0  || $cprog > 0)
-								$row['pstatus'] = 2;
-							else
-								$row['pstatus'] = 1;
-						elseif ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) > strtotime($row['end_date'])) :
-							$row['pstatus'] = 4;
-						endif;
+						// $tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']}")->num_rows;
+						// $cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']} and status = 3")->num_rows;
+						// $prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
+						// $prog = $prog > 0 ?  number_format($prog, 2) : $prog;
+						// $prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['pid']}")->num_rows;
+						// if ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
+						// 	if ($prod  > 0  || $cprog > 0)
+						// 		$row['pstatus'] = 2;
+						// 	else
+						// 		$row['pstatus'] = 1;
+						// elseif ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) > strtotime($row['end_date'])) :
+						// 	$row['pstatus'] = 4;
+						// endif;
 
 
 					?>
@@ -86,10 +86,19 @@
 							<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>
 							<td>
 								<?php
-								$startDate = strtotime($row['start_date']);
-								$endDate = strtotime($row['end_date']);
-								$remainingDays = ($endDate - $startDate) / (60 * 60 * 24); // Chuyển đổi giây thành ngày
-								echo "Còn " . $remainingDays . " ngày";
+								if ($row['status'] != 3) {
+									$endDate = strtotime($row['end_date']);
+									$currentDate = strtotime(date("Y-m-d"));
+									$remainingDays = ($endDate - $currentDate) / (60 * 60 * 24); // Chuyển đổi giây thành ngày
+
+									if ($remainingDays < 0) {
+										echo "Quá hạn " . abs($remainingDays) . " ngày";
+									} else {
+										echo "Còn " . $remainingDays . " ngày";
+									}
+								} else {
+									echo "Đã hoàn thành";
+								}
 								?>
 							</td>
 							<td class="text-center">
