@@ -35,9 +35,7 @@ if (isset($_GET['id'])) {
 		</div>
 		<div class="form-group">
 			<label for="">Mô tả</label>
-			<textarea name="description" id="" cols="30" rows="10" class="summernote form-control">
-				<?php echo isset($description) ? $description : '' ?>
-			</textarea>
+			<textarea name="description" id="" cols="30" rows="10" class="summernote form-control"><?php echo isset($description) ? $description : '' ?></textarea>
 		</div>
 		<div class="form-group">
 			<label for="">Trạng thái</label>
