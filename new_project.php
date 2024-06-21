@@ -3,7 +3,9 @@ if (!isset($conn)) {
   include 'db_connect.php';
 }
 include 'common.php';
-$file_info_json = getFileInfo($filename, "assets/pdf/projects/");
+if(isset($filename)){
+  $file_info_json = getFileInfo($filename, "assets/pdf/projects/");
+}
 ?>
 
 <div class="col-lg-12">
@@ -146,6 +148,13 @@ $file_info_json = getFileInfo($filename, "assets/pdf/projects/");
         }
       }
     });
+
+    var startDate = new Date(form.find('input[name="start_date"]').val());
+    var endDate = new Date(form.find('input[name="end_date"]').val());
+    if (startDate > endDate) {
+        isValid = false;
+        alert_toast('Ngày bắt đầu không thể sau ngày kết thúc.', 'error');
+    }
 
 
     if (isValid) {

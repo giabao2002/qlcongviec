@@ -58,7 +58,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								<dd><?php echo date("d/m/Y", strtotime($start_date)) ?></dd>
 							</dl>
 							<dl>
-								<dt><b class="border-bottom border-primary">Ngày </b></dt>
+								<dt><b class="border-bottom border-primary">Ngày kết thúc</b></dt>
 								<dd><?php echo date("d/m/Y", strtotime($end_date)) ?></dd>
 							</dl>
 							<dl>

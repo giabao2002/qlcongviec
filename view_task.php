@@ -13,6 +13,14 @@ if (isset($_GET['id'])) {
 		<dd><?php echo ucwords($task) ?></dd>
 	</dl>
 	<dl>
+		<dt><b class="border-bottom border-primary">Ngày bắt đầu</b></dt>
+		<dd><?php echo date("d/m/Y", strtotime($start_date)) ?></dd>
+	</dl>
+	<dl>
+		<dt><b class="border-bottom border-primary">Ngày </b></dt>
+		<dd><?php echo date("d/m/Y", strtotime($end_date)) ?></dd>
+	</dl>
+	<dl>
 		<dt><b class="border-bottom border-primary">Trạng thái</b></dt>
 		<dd>
 			<?php
@@ -31,6 +39,7 @@ if (isset($_GET['id'])) {
 		<dd>
 			<?php
 			$filenames = explode(',', $filename);
+			$filenames = array_filter($filenames);
 			foreach ($filenames as $file) {
 				$file = trim($file);
 				if (is_file('assets/pdf/tasks/' . $file)) : ?>

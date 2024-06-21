@@ -30,7 +30,7 @@ if ($_SESSION['login_type'] == 3) {
 ?>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="<?php echo ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) ? 'col-md-8': 'col-md-12'?>">
     <div class="card card-outline card-success">
       <div class="card-header">
         <b>Tiến trình dự án</b>
@@ -144,12 +144,13 @@ if ($_SESSION['login_type'] == 3) {
       </div>
     </div>
   </div>
+  <?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2): ?>
   <div class="col-md-4">
     <div class="row">
       <div class="col-12 col-sm-6 col-md-12">
         <div class="small-box bg-light shadow-sm border">
           <div class="inner">
-            <h3><?php echo $conn->query("SELECT * FROM project_list $where2")->num_rows; ?></h3>
+            <h3><?php echo $conn->query("SELECT * FROM project_list")->num_rows; ?></h3>
             <p>Tổng số dự án</p>
           </div>
           <div class="icon">
@@ -160,7 +161,7 @@ if ($_SESSION['login_type'] == 3) {
       <div class="col-12 col-sm-6 col-md-12">
         <div class="small-box bg-light shadow-sm border">
           <div class="inner">
-            <h3><?php echo $conn->query("SELECT t.*,p.name as pname,p.start_date,p.status as pstatus, p.end_date,p.id as pid FROM task_list t inner join project_list p on p.id = t.project_id $where2")->num_rows; ?></h3>
+            <h3><?php echo $conn->query("SELECT t.*,p.name as pname,p.start_date,p.status as pstatus, p.end_date,p.id as pid FROM task_list t inner join project_list p on p.id = t.project_id")->num_rows; ?></h3>
             <p>Tổng số công việc</p>
           </div>
           <div class="icon">
@@ -170,4 +171,5 @@ if ($_SESSION['login_type'] == 3) {
       </div>
     </div>
   </div>
+  <?php endif; ?>
 </div>

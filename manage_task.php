@@ -6,16 +6,32 @@ if (isset($_GET['id'])) {
 	foreach ($qry as $k => $v) {
 		$$k = $v;
 	}
+	if (isset($filename)) {
+		$file_info_json = getFileInfo($filename, "assets/pdf/tasks/");
+	}
+} else {
+	$pid = $_GET['pid'];
+	$project_query = $conn->query("SELECT start_date, end_date FROM project_list WHERE id = $pid");
+	$project = $project_query->fetch_assoc();
+	$project_start_date = $project['start_date'];
+	$project_end_date = $project['end_date'];
 }
-$file_info_json = getFileInfo($filename, "assets/pdf/tasks/");
 ?>
 <div class="container-fluid">
 	<form action="" id="manage-task">
 		<input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
 		<input type="hidden" name="project_id" value="<?php echo isset($_GET['pid']) ? $_GET['pid'] : '' ?>">
 		<div class="form-group">
-			<label for="">Việc</label>
+			<label for="">Công việc</label>
 			<input type="text" class="form-control form-control-sm" name="task" value="<?php echo isset($task) ? $task : '' ?>" required>
+		</div>
+		<div class="form-group">
+			<label for="">Ngày bắt đầu</label>
+			<input type="date" class="form-control form-control-sm" name="start_date" min="<?php echo $project_start_date; ?>" max="<?php echo $project_end_date; ?>" value="<?php echo isset($start_date) ? date("Y-m-d", strtotime($start_date)) : '' ?>" required>
+		</div>
+		<div class="form-group">
+			<label for="">Ngày kết thúc</label>
+			<input type="date" class="form-control form-control-sm" name="end_date" min="<?php echo $project_start_date; ?>" max="<?php echo $project_end_date; ?>" value="<?php echo isset($end_date) ? date("Y-m-d", strtotime($end_date)) : '' ?>" required>
 		</div>
 		<div class="form-group">
 			<label for="">Mô tả</label>
@@ -93,9 +109,11 @@ $file_info_json = getFileInfo($filename, "assets/pdf/tasks/");
 		// Kiểm tra xem có trường nào để trống hay không
 		var form = $(this);
 		var isValid = true;
+		var msg = ''
 		form.find('input, textarea, select').each(function() {
 			if ($(this).prop('required') && $(this).val() == '') {
 				isValid = false;
+				msg = 'Vui lòng nhập đủ thông tin!'
 			}
 			if ($(this).prop('name') == 'pdf_file' && $(this).val() != '') {
 				var fileExtension = ['pdf'];
@@ -109,6 +127,12 @@ $file_info_json = getFileInfo($filename, "assets/pdf/tasks/");
 				}
 			}
 		});
+		var startDate = new Date(form.find('input[name="start_date"]').val());
+		var endDate = new Date(form.find('input[name="end_date"]').val());
+		if (startDate > endDate) {
+			isValid = false;
+			msg = 'Ngày bắt đầu không thể sau ngày kết thúc!'
+		}
 		if (isValid) {
 			start_load()
 			let formData = new FormData(form[0]);
@@ -137,7 +161,7 @@ $file_info_json = getFileInfo($filename, "assets/pdf/tasks/");
 				}
 			})
 		} else {
-			alert_toast('Vui lòng nhập đủ thông tin!', "error");
+			alert_toast(msg, "error");
 		}
 	})
 </script>

@@ -7,7 +7,9 @@ if (isset($_GET['id'])) {
 		$$k = $v;
 	}
 }
-$file_info_json = getFileInfo($filename, "assets/pdf/reports/");
+if (isset($filename)) {
+	$file_info_json = getFileInfo($filename, "assets/pdf/reports/");
+}
 ?>
 <div class="container-fluid">
 	<form action="" id="manage-progress">
@@ -19,13 +21,13 @@ $file_info_json = getFileInfo($filename, "assets/pdf/reports/");
 					<?php if (!isset($_GET['tid'])) : ?>
 						<div class="form-group">
 							<label for="" class="control-label">Danh sách công việc</label>
-							<select class="form-control form-control-sm select2" name="task_id" required>
+							<select class="form-control form-control-sm select2" name="task_id" id="task_id" required>
 								<option></option>
 								<?php
 								$tasks = $conn->query("SELECT * FROM task_list where project_id = {$_GET['pid']} order by task asc ");
 								while ($row = $tasks->fetch_assoc()) :
 								?>
-									<option value="<?php echo $row['id'] ?>" <?php echo isset($task_id) && $task_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['task']) ?></option>
+									<option value="<?php echo $row['id'] ?>" data-start-date="<?php echo $row['start_date']; ?>" data-end-date="<?php echo $row['end_date']; ?>" <?php echo isset($task_id) && $task_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['task']) ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -70,6 +72,13 @@ $file_info_json = getFileInfo($filename, "assets/pdf/reports/");
 
 <script src="common.js"></script>
 <script>
+	$('#task_id').on('change', function() {
+		var selectedOption = this.options[this.selectedIndex];
+		var startDate = selectedOption.getAttribute('data-start-date');
+		var endDate = selectedOption.getAttribute('data-end-date');
+		document.querySelector('input[name="date"]').min = startDate;
+		document.querySelector('input[name="date"]').max = endDate;
+	});
 	$(document).ready(function() {
 		$('.summernote').summernote({
 			height: 200,
