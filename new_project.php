@@ -79,7 +79,7 @@ if(isset($filename)){
         <div class="row">
           <div class="col-md-10">
             <div class="form-group">
-              <label for="" class="control-label">Tệp pdf</label>
+              <label for="" class="control-label">Tệp đính kèm</label>
               <div class="custom-file">
                 <input type="file" class="custom-file-input" name="pdf_file[]" multiple>
                 <label class="custom-file-label" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" for="custom-file-input">Thêm tệp tin</label>
