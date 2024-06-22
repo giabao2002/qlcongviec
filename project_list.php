@@ -53,7 +53,6 @@
 						unset($trans["\""], $trans["<"], $trans[">"], $trans["<h2"]);
 						$desc = strtr(html_entity_decode($row['description']), $trans);
 						$desc = str_replace(array("<li>", "</li>"), array("", ", "), $desc);
-
 						$tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['id']}")->num_rows;
 						$cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['id']} and status = 3")->num_rows;
 						$prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;

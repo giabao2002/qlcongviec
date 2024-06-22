@@ -40,7 +40,7 @@ if ($_SESSION['login_type'] == 3) {
               <col width="15%">
             </colgroup>
             <thead>
-              <th>#</th>
+              <th>STT</th>
               <th>Dự án</th>
               <th>Tiến trình</th>
               <th>Trạng thái</th>
@@ -94,7 +94,7 @@ if ($_SESSION['login_type'] == 3) {
                     </a>
                     <br>
                     <small>
-                      Ngày hết hạn: <?php echo date("Y-m-d", strtotime($row['end_date'])) ?>
+                      Ngày hết hạn: <?php echo date("d/m/Y", strtotime($row['end_date'])) ?>
                     </small>
                   </td>
                   <td class="project_progress">
