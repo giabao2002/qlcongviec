@@ -447,4 +447,13 @@ class Action
 			return 1;
 		}
 	}
+
+	function view()
+	{
+		extract($_GET);
+		$user_id = $_SESSION['login_id'];
+		$save = $this->db->query("UPDATE task_list SET view = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', view, ','), ',$user_id,', ',')) WHERE id = $id");
+		if ($save)
+			header("location:index.php?page=view_task&id=$id");
+	}
 }

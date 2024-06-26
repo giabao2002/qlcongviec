@@ -91,5 +91,10 @@ if($action == 'delete_department'){
 	if($save)
 		echo $save;
 }
+if($action == 'view'){
+	$save = $crud->view();
+	if($save)
+		echo $save;
+}
 ob_end_flush();
 ?>
