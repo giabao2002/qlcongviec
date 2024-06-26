@@ -20,7 +20,8 @@ $item_count = mysqli_num_rows($result);
   </ul>
 
   <ul class="navbar-nav ml-auto">
-    <li class="nav-item dropdown">
+    <?php if($_SESSION['login_type'] == 4): ?>
+      <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" aria-expanded="true" href="javascript:void(0)">
         <i class="fa fa-bell" aria-hidden="true"></i>
         <?php if ($item_count > 0) : ?>
@@ -46,6 +47,7 @@ $item_count = mysqli_num_rows($result);
         ?>
       </div>
     </li>
+     <?php endif; ?> 
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
