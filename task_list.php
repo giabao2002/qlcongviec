@@ -58,21 +58,6 @@
 							unset($trans["\""], $trans["<"], $trans[">"], $trans["<h2"]);
 							$desc = strtr(html_entity_decode($row['description']), $trans);
 							$desc = str_replace(array("<li>", "</li>"), array("", ", "), $desc);
-							// $tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']}")->num_rows;
-							// $cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['pid']} and status = 3")->num_rows;
-							// $prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
-							// $prog = $prog > 0 ?  number_format($prog, 2) : $prog;
-							// $prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['pid']}")->num_rows;
-							// if ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
-							// 	if ($prod  > 0  || $cprog > 0)
-							// 		$row['pstatus'] = 2;
-							// 	else
-							// 		$row['pstatus'] = 1;
-							// elseif ($row['pstatus'] == 0 && strtotime(date('Y-m-d')) > strtotime($row['end_date'])) :
-							// 	$row['pstatus'] = 4;
-							// endif;
-
-
 					?>
 							<tr>
 								<td class="text-center"><?php echo $i++ ?></td>

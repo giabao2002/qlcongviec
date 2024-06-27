@@ -310,7 +310,7 @@ class Action
 		extract($_POST);
 		$data = "";
 		foreach ($_POST as $k => $v) {
-			if (!in_array($k, array('id', 'pdf_file')) && !is_numeric($k)) {
+			if (!in_array($k, array('id', 'pdf_file', 'view')) && !is_numeric($k)) {
 				if ($k == 'description')
 					$v = htmlentities(str_replace("'", "&#x2019;", $v));
 				if (empty($data)) {
@@ -332,6 +332,11 @@ class Action
 		}
 		$data .= ", filename = '" . $filesName . "'";
 		if (empty($id)) {
+			$department_id = $this->db->query("SELECT department_id FROM project_list where id = $project_id")->fetch_assoc()['department_id'];
+			$user_ids_query = $this->db->query("SELECT user_ids FROM department WHERE id = $department_id");
+			$user_ids_row = $user_ids_query->fetch_assoc();
+			$user_ids = $user_ids_row['user_ids'];
+			$data .= ", view = '$user_ids'";
 			$save = $this->db->query("INSERT INTO task_list set $data");
 		} else {
 			$save = $this->db->query("UPDATE task_list set $data where id = $id");

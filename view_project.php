@@ -168,7 +168,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								<col width="15%">
 							</colgroup>
 							<thead>
-								<th>#</th>
+								<th>STT</th>
 								<th>Công việc</th>
 								<th>Mô tả</th>
 								<th>Trạng thái</th>

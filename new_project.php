@@ -3,7 +3,7 @@ if (!isset($conn)) {
   include 'db_connect.php';
 }
 include 'common.php';
-if(isset($filename)){
+if (isset($filename)) {
   $file_info_json = getFileInfo($filename, "assets/pdf/projects/");
 }
 ?>
@@ -70,9 +70,7 @@ if(isset($filename)){
           <div class="col-md-10">
             <div class="form-group">
               <label for="" class="control-label">Mô tả</label>
-              <textarea name="description" id="" cols="30" rows="10" class="summernote form-control" required>
-						<?php echo isset($description) ? $description : '' ?>
-					</textarea>
+              <textarea name="description" id="" cols="30" rows="10" class="summernote form-control" required><?php echo isset($description) ? $description : '' ?></textarea>
             </div>
           </div>
         </div>
@@ -141,8 +139,8 @@ if(isset($filename)){
     var startDate = new Date(form.find('input[name="start_date"]').val());
     var endDate = new Date(form.find('input[name="end_date"]').val());
     if (startDate > endDate) {
-        isValid = false;
-        alert_toast('Ngày bắt đầu không thể sau ngày kết thúc.', 'error');
+      isValid = false;
+      alert_toast('Ngày bắt đầu không thể sau ngày kết thúc.', 'error');
     }
 
 

@@ -1,6 +1,6 @@
 <!-- Navbar -->
 <?php
-$query = "SELECT * FROM task_list WHERE view IS NULL OR view LIKE '%" . $_SESSION['login_id'] . "%' ORDER BY id DESC LIMIT 5";
+$query = "SELECT * FROM task_list WHERE view IS NULL OR FIND_IN_SET('" . $_SESSION['login_id'] . "', view) > 0 ORDER BY id DESC LIMIT 5";
 $result = $conn->query($query);
 $item_count = mysqli_num_rows($result);
 ?>
@@ -20,34 +20,42 @@ $item_count = mysqli_num_rows($result);
   </ul>
 
   <ul class="navbar-nav ml-auto">
-    <?php if($_SESSION['login_type'] == 4): ?>
+    <?php if ($_SESSION['login_type'] == 4) : ?>
       <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" aria-expanded="true" href="javascript:void(0)">
-        <i class="fa fa-bell" aria-hidden="true"></i>
-        <?php if ($item_count > 0) : ?>
-          <span class="badge badge-warning"><?php echo $item_count; ?></span>
-        <?php endif; ?>
-      </a>
-      <div class="dropdown-menu" aria-labelledby="notifications" style="left: -2.5em;">
-        <?php
-        $output = '';
-        if ($item_count > 0) {
-          $current_item = 0;
-          while ($row = mysqli_fetch_array($result)) {
-            $current_item++;
-            $output .= '<a href="ajax.php?action=view&id=' . $row['id'] . '" class="dropdown-item"><strong>' . $row["task"] . '</strong><br /><small><em>' . $row["description"] . '</em></small></a>';
-            if ($current_item < $item_count) {
-              $output .= '<div class="dropdown-divider"></div>';
+        <a class="nav-link" data-toggle="dropdown" aria-expanded="true" href="javascript:void(0)">
+          <i class="fa fa-bell" aria-hidden="true"></i>
+          <?php if ($item_count > 0) : ?>
+            <span class="badge badge-warning"><?php echo $item_count; ?></span>
+          <?php endif; ?>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="notifications" style="left: -2.5em;">
+          <?php
+          $output = '';
+          if ($item_count > 0) {
+            $current_item = 0;
+            while ($row = mysqli_fetch_array($result)) {
+              $current_item++;
+              // Decode HTML entities and strip tags
+              $description = strip_tags(html_entity_decode($row["description"]));
+              // Cắt chuỗi nếu dài hơn 50 ký tự và thêm "..."
+              $maxLength = 50;
+              if (mb_strlen($description) > $maxLength) {
+                $description = mb_substr($description, 0, $maxLength) . "...";
+              }
+              $output .= '<a href="ajax.php?action=view&id=' . $row['id'] . '" class="dropdown-item"><strong>' . $row["task"] . '</strong><br /><small><div>' . $description . '</div></small></a>';
+              if ($current_item < $item_count) {
+                $output .= '<div class="dropdown-divider"></div>';
+              }
             }
+          } else {
+            $output .= '<a href="#" class="text-italic dropdown-item">Không có công việc mới</a>';
           }
-        } else {
-          $output .= '<a href="#" class="text-italic dropdown-item">Không có công việc mới</a>';
-        }
-        echo $output;
-        ?>
-      </div>
-    </li>
-     <?php endif; ?> 
+          echo $output;
+          ?>
+
+        </div>
+      </li>
+    <?php endif; ?>
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>

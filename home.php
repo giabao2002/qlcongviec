@@ -164,7 +164,7 @@ if ($_SESSION['login_type'] == 3) {
             <div>
               <h3><?php
                   $qryToltal2 = $conn->query("SELECT t.*,p.name as pname,p.start_date,p.status as pstatus, p.end_date,p.id as pid FROM task_list t inner join project_list p on p.id = t.project_id $where2")->num_rows;
-                  echo $qryToltal1 ?? 0; ?></h3>
+                  echo $qryToltal2 ?? 0; ?></h3>
               <p><b>Tổng số công việc</b></p>
             </div>
             <?php if (isset($qryToltal2)) : ?>

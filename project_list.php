@@ -46,68 +46,70 @@
 						}
 					}
 					$department_ids_string = implode(',', $department_ids);
-					$where2 = "WHERE department_id IN ($department_ids_string)";
-					$qry = $conn->query("SELECT * FROM project_list $where2 order by name asc");
-					while ($row = $qry->fetch_assoc()) :
-						$trans = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES);
-						unset($trans["\""], $trans["<"], $trans[">"], $trans["<h2"]);
-						$desc = strtr(html_entity_decode($row['description']), $trans);
-						$desc = str_replace(array("<li>", "</li>"), array("", ", "), $desc);
-						$tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['id']}")->num_rows;
-						$cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['id']} and status = 3")->num_rows;
-						$prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
-						$prog = $prog > 0 ?  number_format($prog, 2) : $prog;
-						$prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['id']}")->num_rows;
-						if ($row['status'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
-							if ($prod  > 0  || $cprog > 0)
-								$row['status'] = 2;
-							else
-								$row['status'] = 1;
-						elseif ($row['status'] == 0 && strtotime(date('Y-m-d')) > strtotime($row['end_date'])) :
-							$row['status'] = 4;
-						endif;
+					if (!empty($department_ids_string)) {
+						$where2 = "WHERE department_id IN ($department_ids_string)";
+						$qry = $conn->query("SELECT * FROM project_list $where2 order by name asc");
+						while ($row = $qry->fetch_assoc()) :
+							$trans = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES);
+							unset($trans["\""], $trans["<"], $trans[">"], $trans["<h2"]);
+							$desc = strtr(html_entity_decode($row['description']), $trans);
+							$desc = str_replace(array("<li>", "</li>"), array("", ", "), $desc);
+							$tprog = $conn->query("SELECT * FROM task_list where project_id = {$row['id']}")->num_rows;
+							$cprog = $conn->query("SELECT * FROM task_list where project_id = {$row['id']} and status = 3")->num_rows;
+							$prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
+							$prog = $prog > 0 ? number_format($prog, 2) : $prog;
+							$prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['id']}")->num_rows;
+							if ($row['status'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
+								if ($prod > 0 || $cprog > 0)
+									$row['status'] = 2;
+								else
+									$row['status'] = 1;
+							elseif ($row['status'] == 0 && strtotime(date('Y-m-d')) > strtotime($row['end_date'])) :
+								$row['status'] = 4;
+							endif;
 					?>
-						<tr>
-							<th class="text-center"><?php echo $i++ ?></th>
-							<td>
-								<p><b><?php echo ucwords($row['name']) ?></b></p>
-								<p class="truncate"><?php echo strip_tags($desc) ?></p>
-							</td>
-							<td><b><?php echo date("d/m/Y", strtotime($row['start_date'])) ?></b></td>
-							<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>
-							<td class="">
-								<?php
-								if ($stat[$row['status']] == 'Chờ') {
-									echo "<span class='badge badge-secondary'>{$stat[$row['status']]}</span>";
-								} elseif ($stat[$row['status']] == 'Bắt đầu') {
-									echo "<span class='badge badge-primary'>{$stat[$row['status']]}</span>";
-								} elseif ($stat[$row['status']] == 'Đang làm') {
-									echo "<span class='badge badge-info'>{$stat[$row['status']]}</span>";
-								} elseif ($stat[$row['status']] == 'Tạm dừng') {
-									echo "<span class='badge badge-warning'>{$stat[$row['status']]}</span>";
-								} elseif ($stat[$row['status']] == 'Quá hạn') {
-									echo "<span class='badge badge-danger'>{$stat[$row['status']]}</span>";
-								} elseif ($stat[$row['status']] == 'Xong') {
-									echo "<span class='badge badge-success'>{$stat[$row['status']]}</span>";
-								}
-								?>
-							</td>
-							<td class="text-center">
-								<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-									Hành động
-								</button>
-								<div class="dropdown-menu" style="">
-									<a class="dropdown-item view_project" href="./index.php?page=view_project&id=<?php echo $row['id'] ?>" data-id="<?php echo $row['id'] ?>">Xem</a>
-									<?php if ($_SESSION['login_type'] != 3 && $_SESSION['login_type'] != 4) : ?>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="./index.php?page=edit_project&id=<?php echo $row['id'] ?>">Sửa</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item delete_project" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Xóa</a>
-									<?php endif; ?>
-								</div>
-							</td>
-						</tr>
-					<?php endwhile; ?>
+							<tr>
+								<th class="text-center"><?php echo $i++ ?></th>
+								<td>
+									<p><b><?php echo ucwords($row['name']) ?></b></p>
+									<p class="truncate"><?php echo strip_tags($desc) ?></p>
+								</td>
+								<td><b><?php echo date("d/m/Y", strtotime($row['start_date'])) ?></b></td>
+								<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>
+								<td class="">
+									<?php
+									if ($stat[$row['status']] == 'Chờ') {
+										echo "<span class='badge badge-secondary'>{$stat[$row['status']]}</span>";
+									} elseif ($stat[$row['status']] == 'Bắt đầu') {
+										echo "<span class='badge badge-primary'>{$stat[$row['status']]}</span>";
+									} elseif ($stat[$row['status']] == 'Đang làm') {
+										echo "<span class='badge badge-info'>{$stat[$row['status']]}</span>";
+									} elseif ($stat[$row['status']] == 'Tạm dừng') {
+										echo "<span class='badge badge-warning'>{$stat[$row['status']]}</span>";
+									} elseif ($stat[$row['status']] == 'Quá hạn') {
+										echo "<span class='badge badge-danger'>{$stat[$row['status']]}</span>";
+									} elseif ($stat[$row['status']] == 'Xong') {
+										echo "<span class='badge badge-success'>{$stat[$row['status']]}</span>";
+									}
+									?>
+								</td>
+								<td class="text-center">
+									<button type="button" class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										Hành động
+									</button>
+									<div class="dropdown-menu" style="">
+										<a class="dropdown-item view_project" href="./index.php?page=view_project&id=<?php echo $row['id'] ?>" data-id="<?php echo $row['id'] ?>">Xem</a>
+										<?php if ($_SESSION['login_type'] != 3 && $_SESSION['login_type'] != 4) : ?>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item" href="./index.php?page=edit_project&id=<?php echo $row['id'] ?>">Sửa</a>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item delete_project" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Xóa</a>
+										<?php endif; ?>
+									</div>
+								</td>
+							</tr>
+					<?php endwhile;
+					} ?>
 				</tbody>
 			</table>
 		</div>

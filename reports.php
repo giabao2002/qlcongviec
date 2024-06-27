@@ -78,14 +78,22 @@
                 <td class="text-center">
                   <?php echo number_format($dur ?? 0) . ' Hr/s.' ?>
                 </td>
-                <td class="project_progress">
-                  <div class="progress progress-sm">
-                    <div class="progress-bar bg-green" role="progressbar" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $prog ?>%">
-                    </div>
-                  </div>
-                  <small>
-                    <?php echo $prog ?>% Complete
-                  </small>
+                <td>
+                  <?php
+                  if ($row['status'] != 3) {
+                    $endDate = strtotime($row['end_date']);
+                    $currentDate = strtotime(date("Y-m-d"));
+                    $remainingDays = ($endDate - $currentDate) / (60 * 60 * 24); // Chuyển đổi giây thành ngày
+
+                    if ($remainingDays < 0) {
+                      echo "Quá hạn " . abs($remainingDays) . " ngày";
+                    } else {
+                      echo "Còn " . $remainingDays . " ngày";
+                    }
+                  } else {
+                    echo "Đã hoàn thành";
+                  }
+                  ?>
                 </td>
                 <td class="project-state">
                   <?php

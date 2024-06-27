@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
 	$project = $project_query->fetch_assoc();
 	$project_start_date = $project['start_date'];
 	$project_end_date = $project['end_date'];
-	$department_query = $conn->query("SELECT user_ids FROM department WHERE id =". $project['department_id']."");
+	$department_query = $conn->query("SELECT user_ids FROM department WHERE id =" . $project['department_id'] . "");
 	if ($department_query->num_rows > 0) {
 		$department = $department_query->fetch_assoc();
 		$user_ids = $department['user_ids'];
