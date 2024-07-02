@@ -4,7 +4,7 @@
 		<div class="card-header">
 			<?php if ($_SESSION['login_type'] != 4 && $_SESSION['login_type'] != 3) : ?>
 				<div class="card-tools">
-					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm dự án</a>
+					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm nhiệm vụ</a>
 				</div>
 			<?php endif; ?>
 		</div>
@@ -22,7 +22,7 @@
 				<thead>
 					<tr>
 						<th class="text-center">STT</th>
-						<th>Dự án</th>
+						<th>Nhiệm vụ</th>
 						<th>Công việc</th>
 						<th>Ngày bắt đầu</th>
 						<th>Ngày kết thúc</th>

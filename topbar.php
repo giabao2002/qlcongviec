@@ -6,15 +6,18 @@ $item_count = mysqli_num_rows($result);
 ?>
 <nav class="main-header navbar navbar-expand navbar-primary navbar-dark ">
   <!-- Left navbar links -->
-  <ul class="navbar-nav">
-    <?php if (isset($_SESSION['login_id'])) : ?>
+  <ul class="navbar-nav fix-navbar">
+    <!-- <?php if (isset($_SESSION['login_id'])) : ?>
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="" role="button"><i class="fas fa-bars"></i></a>
       </li>
-    <?php endif; ?>
+    <?php endif; ?> -->
+    <li>
+      <img class="img-topbar" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEPMP5DJWg6DnGNjCvCaFiZneDNtHgJBlVnQ&s" alt="">
+    </li>
     <li>
       <a class="nav-link text-white" href="./" role="button">
-        <large><b><?php echo 'Quản lý công việc' ?></b></large>
+        <large><b><?php echo 'Ủy ban nhân dân' ?></b></large>
       </a>
     </li>
   </ul>
@@ -29,20 +32,19 @@ $item_count = mysqli_num_rows($result);
           <?php endif; ?>
         </a>
         <div class="dropdown-menu" aria-labelledby="notifications" style="left: -2.5em;">
+          <h4>Thông báo</h4>
           <?php
           $output = '';
           if ($item_count > 0) {
             $current_item = 0;
             while ($row = mysqli_fetch_array($result)) {
               $current_item++;
-              // Decode HTML entities and strip tags
               $description = strip_tags(html_entity_decode($row["description"]));
-              // Cắt chuỗi nếu dài hơn 50 ký tự và thêm "..."
               $maxLength = 50;
               if (mb_strlen($description) > $maxLength) {
                 $description = mb_substr($description, 0, $maxLength) . "...";
               }
-              $output .= '<a href="ajax.php?action=view&id=' . $row['id'] . '" class="dropdown-item"><strong>' . $row["task"] . '</strong><br /><small><div>' . $description . '</div></small></a>';
+              $output .= '<a href="ajax.php?action=view&id=' . $row['id'] . '" class="dropdown-item"><strong>Công việc: ' . $row["task"] . '</strong><br /><small><div> Mô tả: ' . $description . '</div></small></a>';
               if ($current_item < $item_count) {
                 $output .= '<div class="dropdown-divider"></div>';
               }
@@ -52,7 +54,6 @@ $item_count = mysqli_num_rows($result);
           }
           echo $output;
           ?>
-
         </div>
       </li>
     <?php endif; ?>

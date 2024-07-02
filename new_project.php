@@ -17,7 +17,7 @@ if (isset($filename)) {
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="" class="control-label">Tên dự án</label>
+              <label for="" class="control-label">Tên nhiệm vụ</label>
               <input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>" required>
             </div>
           </div>

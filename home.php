@@ -27,7 +27,7 @@ if ($_SESSION['login_type'] == 3) {
   <div class="col-md-8">
     <div class="card card-outline card-success">
       <div class="card-header">
-        <b>Tiến trình dự án</b>
+        <b>Tiến trình nhiệm vụ</b>
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
@@ -41,7 +41,7 @@ if ($_SESSION['login_type'] == 3) {
             </colgroup>
             <thead>
               <th>STT</th>
-              <th>Dự án</th>
+              <th>Nhiệm vụ</th>
               <th>Tiến trình</th>
               <th>Trạng thái</th>
               <th></th>
@@ -151,7 +151,7 @@ if ($_SESSION['login_type'] == 3) {
               $qryToltal1 = $conn->query("SELECT * FROM project_list $where2")->num_rows;
               echo  $qryToltal1 ?? 0; ?>
             </h3>
-            <p><b>Tổng số dự án</b></p>
+            <p><b>Tổng số nhiệm vụ</b></p>
           </div>
           <div class="icon">
             <i class="fa fa-layer-group"></i>

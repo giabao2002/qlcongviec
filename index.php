@@ -34,6 +34,7 @@ include 'header.php'
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
+            <a class="nav-link" data-widget="pushmenu" href="" role="button"><i class="fas fa-bars"></i></a>
             <div class="col-sm-6">
               <h1 class="m-0"><?php echo $title ?></h1>
             </div><!-- /.col -->
@@ -123,7 +124,7 @@ include 'header.php'
     <!-- Main Footer -->
     <footer class="main-footer">
       <div class="float-right d-none d-sm-inline-block">
-        <b><?php echo 'Quản lý công việc' ?></b>
+        <b><?php echo 'Ủy ban nhân dân' ?></b>
       </div>
     </footer>
   </div>

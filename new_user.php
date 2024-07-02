@@ -20,7 +20,7 @@
 								<label for="" class="control-label">Vai trò</label>
 								<select name="type" id="type" class="custom-select custom-select-sm" required>
 									<option value="4" <?php echo isset($type) && $type == 4 ? 'selected' : '' ?>>Nhân viên</option>
-									<option value="3" <?php echo isset($type) && $type == 3 ? 'selected' : '' ?>>Quản lý dự án</option>
+									<option value="3" <?php echo isset($type) && $type == 3 ? 'selected' : '' ?>>Quản lý nhiệm vụ</option>
 									<option value="2" <?php echo isset($type) && $type == 2 ? 'selected' : '' ?>>Lãnh đạo</option>
 									<option value="1" <?php echo isset($type) && $type == 1 ? 'selected' : '' ?>>Admin</option>
 								</select>

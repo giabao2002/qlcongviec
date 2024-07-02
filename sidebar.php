@@ -1,15 +1,13 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <div class="dropdown">
+    <!-- <div class="dropdown">
       <a href="./" class="brand-link">
         <?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) : ?>
           <h3 class="text-center p-0 m-0"><b>Quản trị</b></h3>
         <?php else : ?>
           <h3 class="text-center p-0 m-0"><b>Phòng ban</b></h3>
         <?php endif; ?>
-
       </a>
-
-    </div>
+    </div> -->
     <div class="sidebar pb-4 mb-4">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
@@ -17,7 +15,7 @@
             <a href="./" class="nav-link nav-home">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Bảng điều khiển
+                Trang chủ
               </p>
             </a>
           </li>
@@ -25,7 +23,7 @@
             <a href="#" class="nav-link nav-edit_project nav-view_project">
               <i class="nav-icon fas fa-layer-group"></i>
               <p>
-                Dự án
+                Nhiệm vụ
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -131,6 +129,5 @@
         }
 
       }
-
     })
   </script>

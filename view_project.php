@@ -31,7 +31,7 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 					<div class="row">
 						<div class="col-sm-6">
 							<dl>
-								<dt><b class="border-bottom border-primary">Tên dự án</b></dt>
+								<dt><b class="border-bottom border-primary">Tên nhiệm vụ</b></dt>
 								<dd><?php echo ucwords($name) ?></dd>
 								<dt><b class="border-bottom border-primary">Tệp tin</b></dt>
 								<dd>

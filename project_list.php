@@ -4,7 +4,7 @@
 		<div class="card-header">
 			<?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) : ?>
 				<div class="card-tools">
-					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm dự án</a>
+					<a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_project"><i class="fa fa-plus"></i> Thêm nhiệm vụ</a>
 				</div>
 			<?php endif; ?>
 		</div>
@@ -21,7 +21,7 @@
 				<thead>
 					<tr>
 						<th class="text-center">STT</th>
-						<th>Dự án</th>
+						<th>Nhiệm vụ</th>
 						<th>Ngày bắt đầu</th>
 						<th>Ngày hết hạn</th>
 						<th>Trạng thái</th>
@@ -129,7 +129,7 @@
 		$('#list').dataTable()
 
 		$('.delete_project').click(function() {
-			_conf("Bạn chắc chắn muốn xóa dự án này?", "delete_project", [$(this).attr('data-id')])
+			_conf("Bạn chắc chắn muốn xóa nhiệm vụ này?", "delete_project", [$(this).attr('data-id')])
 		})
 	})
 

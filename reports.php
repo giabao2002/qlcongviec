@@ -2,7 +2,7 @@
 <div class="col-md-12">
   <div class="card card-outline card-success">
     <div class="card-header">
-      <b>Tiến độ dự án</b>
+      <b>Tiến độ nhiệm vụ</b>
       <div class="card-tools">
         <button class="btn btn-flat btn-sm bg-gradient-success btn-success" id="print"><i class="fa fa-print"></i> In</button>
       </div>
@@ -21,7 +21,7 @@
           </colgroup>
           <thead>
             <th>STT</th>
-            <th>Dự án</th>
+            <th>Nhiệm vụ</th>
             <th>Công việc</th>
             <th>Công việc đã xong</th>
             <th>Thời gian làm việc</th>

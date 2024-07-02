@@ -20,7 +20,7 @@
 				<tbody>
 					<?php
 					$i = 1;
-					$type = array('',"Admin","Lãnh đạo","Quản lý dự án","Nhân viên");
+					$type = array('',"Admin","Lãnh đạo", "Quản lý nhiệm vụ","Nhân viên");
 					$qry = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users order by concat(lastname,' ',firstname) asc");
 					while($row= $qry->fetch_assoc()):
 					?>
