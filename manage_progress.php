@@ -38,7 +38,7 @@ if (isset($filename)) {
 						<label for="">Chủ đề</label>
 						<input type="text" class="form-control form-control-sm" name="subject" value="<?php echo isset($subject) ? $subject : '' ?>" required>
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label for="">Ngày</label>
 						<input type="date" class="form-control form-control-sm" name="date" value="<?php echo isset($date) ? date("Y-m-d", strtotime($date)) : '' ?>" required>
 					</div>
@@ -49,7 +49,7 @@ if (isset($filename)) {
 					<div class="form-group">
 						<label for="">Thời gian kết thúc</label>
 						<input type="time" class="form-control form-control-sm" name="end_time" value="<?php echo isset($end_time) ? date("H:i", strtotime("2020-01-01 " . $end_time)) : '' ?>" required>
-					</div>
+					</div> -->
 					<div class="form-group">
 						<label for="" class="control-label">Tệp đính kèm</label>
 						<div class="custom-file">
@@ -72,13 +72,6 @@ if (isset($filename)) {
 
 <script src="common.js"></script>
 <script>
-	$('#task_id').on('change', function() {
-		var selectedOption = this.options[this.selectedIndex];
-		var startDate = selectedOption.getAttribute('data-start-date');
-		var endDate = selectedOption.getAttribute('data-end-date');
-		document.querySelector('input[name="date"]').min = startDate;
-		document.querySelector('input[name="date"]').max = endDate;
-	});
 	$(document).ready(function() {
 		$('.summernote').summernote({
 			height: 200,

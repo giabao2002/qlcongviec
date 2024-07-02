@@ -4,19 +4,14 @@ $query = "SELECT * FROM task_list WHERE view IS NULL OR FIND_IN_SET('" . $_SESSI
 $result = $conn->query($query);
 $item_count = mysqli_num_rows($result);
 ?>
-<nav class="main-header navbar navbar-expand navbar-primary navbar-dark ">
+<nav class="navbar navbar-expand navbar-primary navbar-dark ">
   <!-- Left navbar links -->
   <ul class="navbar-nav fix-navbar">
-    <!-- <?php if (isset($_SESSION['login_id'])) : ?>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-    <?php endif; ?> -->
     <li>
       <img class="img-topbar" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEPMP5DJWg6DnGNjCvCaFiZneDNtHgJBlVnQ&s" alt="">
     </li>
     <li>
-      <a class="nav-link text-white" href="./" role="button">
+      <a class="nav-link text-white" href="./">
         <large><b><?php echo 'Ủy ban nhân dân' ?></b></large>
       </a>
     </li>
@@ -79,6 +74,12 @@ $item_count = mysqli_num_rows($result);
     </li>
   </ul>
 </nav>
+<style>
+  .navbar{
+    height: 6.5vh;
+    padding-left: 16px;
+  }
+</style>
 <!-- /.navbar -->
 <script>
   $('#manage_account').click(function() {
