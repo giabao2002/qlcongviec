@@ -12,19 +12,17 @@
         <table class="table m-0 table-bordered">
           <colgroup>
             <col width="5%">
+            <col width="30%">
+            <col width="15%">
+            <col width="15%">
             <col width="20%">
-            <col width="15%">
-            <col width="15%">
-            <col width="15%">
-            <col width="15%">
-            <col width="15%">
+            <col width="20%">
           </colgroup>
           <thead>
             <th>STT</th>
             <th>Nhiệm vụ</th>
             <th>Công việc</th>
             <th>Công việc đã xong</th>
-            <th>Thời gian làm việc</th>
             <th>Tiến độ</th>
             <th>Trạng thái</th>
           </thead>
@@ -45,8 +43,6 @@
               $prog = $tprog > 0 ? ($cprog / $tprog) * 100 : 0;
               $prog = $prog > 0 ?  number_format($prog, 2) : $prog;
               $prod = $conn->query("SELECT * FROM user_productivity where project_id = {$row['id']}")->num_rows;
-              $dur = $conn->query("SELECT sum(time_rendered) as duration FROM user_productivity where project_id = {$row['id']}");
-              $dur = $dur->num_rows > 0 ? $dur->fetch_assoc()['duration'] : 0;
               if ($row['status'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])) :
                 if ($prod  > 0  || $cprog > 0)
                   $row['status'] = 2;
@@ -74,9 +70,6 @@
                 </td>
                 <td class="text-center">
                   <?php echo number_format($cprog) ?>
-                </td>
-                <td class="text-center">
-                  <?php echo number_format($dur ?? 0) . ' Hr/s.' ?>
                 </td>
                 <td>
                   <?php

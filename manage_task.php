@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
 		</div>
 		<div class="form-group">
 			<label for="">Ngày bắt đầu</label>
-			<input type="date" class="form-control form-control-sm" name="start_date" min="<?php echo $project_start_date; ?>" max="<?php echo $project_end_date; ?>" value="<?php echo isset($start_date) ? date("Y-m-d", strtotime($start_date)) : '' ?>" required>
+			<input type="date" class="form-control form-control-sm" name="start_date" min="<?php echo $project_start_date; ?>" max="<?php echo $project_end_date; ?>" value="<?php echo isset($start_date) ? date("Y-m-d", strtotime($start_date)) : date("Y-m-d", strtotime($project_start_date)) ?>" required>
 		</div>
 		<div class="form-group">
 			<label for="">Ngày kết thúc</label>

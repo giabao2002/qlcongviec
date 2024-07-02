@@ -86,7 +86,6 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								<dd>
 									<?php if (isset($department['id'])) : ?>
 										<div class="d-flex align-items-center mt-1">
-											<!-- <img class="img-circle img-thumbnail p-0 shadow-sm border-info img-sm mr-3" src="assets/uploads/<?php echo $manager['avatar'] ?>" alt="Avatar"> -->
 											<b><?php echo ucwords($department['name']) ?></b>
 										</div>
 									<?php endif; ?>
@@ -257,14 +256,6 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 								<img class="img-circle img-bordered-sm" src="assets/uploads/<?php echo $row['avatar'] ?>" alt="user image">
 								<span class="username">
 									<a href="#"><?php echo ucwords($row['uname']) ?>[ <?php echo ucwords($row['task']) ?> ]</a>
-								</span>
-								<span class="description">
-									<span class="fa fa-calendar-day"></span>
-									<span><b><?php echo date('d/m/Y', strtotime($row['date'])) ?></b></span>
-									<span class="fa fa-user-clock"></span>
-									<span>Bắt đầu: <b><?php echo date('h:i A', strtotime($row['date'] . ' ' . $row['start_time'])) ?></b></span>
-									<span> | </span>
-									<span>Kết thúc: <b><?php echo date('h:i A', strtotime($row['date'] . ' ' . $row['end_time'])) ?></b></span>
 								</span>
 
 							</div>
