@@ -8,7 +8,7 @@
             <form action="" id="manage-department">
                 <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="form-group">
                             <label for="" class="control-label">Tên phòng ban</label>
                             <input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>" required>
@@ -17,13 +17,13 @@
                 </div>
                 <div class="row">
                     <?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) : ?>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
-                                <label for="" class="control-label">Quản lý phòng ban</label>
-                                <select class="form-control form-control-sm select2" name="manager_id" required>
+                                <label for="" class="control-label">Lãnh đạo</label>
+                                <select class="form-control form-control-sm select2" name="director_id" required>
                                     <option></option>
                                     <?php
-                                    $managers = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where type = 3 order by concat(lastname,' ',firstname) asc ");
+                                    $managers = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where type = 2 order by concat(lastname,' ',firstname) asc ");
                                     while ($row = $managers->fetch_assoc()) :
                                     ?>
                                         <option value="<?php echo $row['id'] ?>" <?php echo isset($manager_id) && $manager_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['name']) ?></option>
@@ -34,13 +34,47 @@
                     <?php else : ?>
                         <input type="hidden" name="manager_id" value="<?php echo $_SESSION['login_id'] ?>">
                     <?php endif; ?>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="" class="control-label">Quản lý phòng ban</label>
+                            <select class="form-control form-control-sm select2" name="manager_id" required>
+                                <option></option>
+                                <?php
+                                $managers = $conn->query("
+                                SELECT users.*, CONCAT(users.lastname, ' ', users.firstname) AS name
+                                FROM users
+                                LEFT JOIN department ON users.id = department.manager_id
+                                WHERE users.type = 3 AND department.manager_id IS NULL
+                                ORDER BY CONCAT(users.lastname, ' ', users.firstname) ASC
+                                ");
+                                while ($row = $managers->fetch_assoc()) :
+                                ?>
+                                    <option value="<?php echo $row['id'] ?>" <?php echo isset($manager_id) && $manager_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['name']) ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="" class="control-label">Thành viên</label>
                             <select class="form-control form-control-sm select2" multiple="multiple" name="user_ids[]" required>
                                 <option></option>
                                 <?php
-                                $employees = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where type = 4 order by concat(lastname,' ',firstname) asc ");
+                                $depResult = $conn->query("SELECT user_ids FROM department");
+                                $userIds = [];
+                                while ($row = $depResult->fetch_assoc()) {
+                                    $ids = explode(',', $row['user_ids']);
+                                    foreach ($ids as $id) {
+                                        $userIds[$id] = true;
+                                    }
+                                }
+                                $uniqueUserIds = array_keys($userIds);
+                                if (count($uniqueUserIds) > 0) {
+                                    $notInCondition = "AND id NOT IN (" . implode(',', $uniqueUserIds) . ")";
+                                } else {
+                                    $notInCondition = "";
+                                }
+                                $employees = $conn->query("SELECT *, CONCAT(lastname, ' ', firstname) AS name FROM users WHERE type = 4 $notInCondition ORDER BY CONCAT(lastname, ' ', firstname) ASC");
                                 while ($row = $employees->fetch_assoc()) :
                                 ?>
                                     <option value="<?php echo $row['id'] ?>" <?php echo isset($user_ids) && in_array($row['id'], explode(',', $user_ids)) ? "selected" : '' ?>><?php echo ucwords($row['name']) ?></option>

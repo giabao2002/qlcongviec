@@ -12,15 +12,17 @@
 			<table class="table tabe-hover table-condensed" id="list">
 				<colgroup>
 					<col width="5%">
-					<col width="30%">
 					<col width="25%">
-					<col width="25%">
+					<col width="20%">
+					<col width="20%">
+					<col width="20%">
 					<col width="10%">
 				</colgroup>
 				<thead>
 					<tr>
 						<th class="text-center">STT</th>
 						<th>Phòng ban</th>
+						<th>Lãnh đạo</th>
 						<th>Quản lý</th>
 						<th>Thành viên</th>
 						<th>Hành động</th>
@@ -36,6 +38,23 @@
 							<th class="text-center"><?php echo $i++ ?></th>
 							<td>
 								<p><b><?php echo ucwords($row['name']) ?></b></p>
+							</td>
+							<td>
+								<?php
+								$directorQuery = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where id = {$row['director_id']}");
+								if ($directorQuery !== false) {
+									$director = $directorQuery->num_rows > 0 ? $directorQuery->fetch_array() : array();
+								} else {
+									$director = array();
+									echo "";
+								}
+								?>
+								<?php if (isset($director['id'])) : ?>
+									<div class="d-flex align-items-center mt-1">
+										<img class="img-circle img-thumbnail p-0 shadow-sm border-info img-sm mr-3" src="assets/uploads/<?php echo $director['avatar'] ?>" alt="Avatar">
+										<b><?php echo ucwords($director['name']) ?></b>
+									</div>
+								<?php endif; ?>
 							</td>
 							<td>
 								<?php
