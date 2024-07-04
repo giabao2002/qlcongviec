@@ -19,6 +19,9 @@
     "department_list" => "Danh sách phòng ban",
     "new_department" => "Phòng ban mới",
     "edit_department" => "Sửa thông tin phòng ban",
+    "new_draft" => "Dự án mới",
+    "draft_list" => "Danh sách dự án",
+    "view_draft" => "Dự án",
   ];
 
   if (isset($_GET['page']) && array_key_exists($_GET['page'], $pageNames)) {

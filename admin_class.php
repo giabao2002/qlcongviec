@@ -89,11 +89,11 @@ class Action
 				$this->db->query("UPDATE department SET manager_id = NULL WHERE manager_id = $id");
 			} elseif ($old_user_type == 4 && $type != 4) {
 				$qry = $this->db->query("SELECT * FROM department WHERE FIND_IN_SET($id, user_ids)")->fetch_object();
-				if($qry){
+				if ($qry) {
 					$user_ids = explode(',', $qry->user_ids);
 					$key = array_search($id, $user_ids);
 					unset($user_ids[$key]);
-					$this->db->query("UPDATE department SET user_ids = '".implode(',', $user_ids)."' WHERE id = $qry->id");
+					$this->db->query("UPDATE department SET user_ids = '" . implode(',', $user_ids) . "' WHERE id = $qry->id");
 				}
 			}
 			$save = $this->db->query("UPDATE users set $data where id = $id");
@@ -258,6 +258,49 @@ class Action
 			$fname = $file['name'][$i];
 			$move = move_uploaded_file($file['tmp_name'][$i], $path . $fname);
 			return $move;
+		}
+	}
+	function save_draft()
+	{
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id', 'pdf_file')) && !is_numeric($k)) {
+				if ($k == 'description')
+					$v = htmlentities(str_replace("'", "&#x2019;", $v));
+				if (empty($data)) {
+					$data .= " $k='$v' ";
+				} else {
+					$data .= ", $k='$v' ";
+				}
+			}
+		}
+		$filesName = '';
+		if (isset($_FILES['pdf_file'])) {
+			$pdf_files = $_FILES['pdf_file'];
+			for ($i = 0; $i < count($pdf_files['name']); $i++) {
+				$result = $this->save_pdf($pdf_files, 'assets/pdf/drafts/', $i);
+				if ($result) {
+					$filesName .= $pdf_files['name'][$i] . ',';
+				}
+			}
+		}
+		$data .= ", filename = '" . $filesName . "'";
+		if (empty($id)) {
+			$save = $this->db->query("INSERT INTO draft_list set $data");
+		} else {
+			$save = $this->db->query("UPDATE draft_list set $data where id = $id");
+		}
+		if ($save) {
+			return 1;
+		}
+	}
+	function delete_draft()
+	{
+		extract($_POST);
+		$delete = $this->db->query("DELETE FROM draft_list where id = $id");
+		if ($delete) {
+			return 1;
 		}
 	}
 

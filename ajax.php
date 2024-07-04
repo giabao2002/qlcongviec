@@ -46,6 +46,16 @@ if ($action == 'delete_user') {
 	if ($save)
 		echo $save;
 }
+if ($action == 'save_draft') {
+	$save = $crud->save_draft();
+	if ($save)
+		echo $save;
+}
+if ($action == 'delete_draft') {
+	$save = $crud->delete_draft();
+	if ($save)
+		echo $save;
+}
 if ($action == 'save_project') {
 	$save = $crud->save_project();
 	if ($save)
