@@ -1,4 +1,4 @@
-body{
+body {
   background-color: #007bff;
 }
 .toast {
@@ -124,21 +124,21 @@ body{
   border-bottom: 1px solid #ddd;
 }
 
-.main-header{
+.main-header {
   height: 60px;
 }
-.layout-fixed .main-sidebar{
-  margin-top:60px;
+.layout-fixed .main-sidebar {
+  margin-top: 46px;
 }
 
-.layout-navbar-fixed.layout-fixed .wrapper .sidebar{
-  margin-top:0;
+.layout-navbar-fixed.layout-fixed .wrapper .sidebar {
+  margin-top: 0;
 }
 
-.fix-navbar{
+.fix-navbar {
   position: fixed;
 }
-.img-topbar{
+.img-topbar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
