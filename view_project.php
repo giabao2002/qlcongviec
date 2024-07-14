@@ -18,6 +18,8 @@ if ($status == 0 && strtotime(date('Y-m-d')) >= strtotime($start_date)) :
 elseif ($status == 0 && strtotime(date('Y-m-d')) > strtotime($end_date)) :
 	$status = 4;
 endif;
+$draft = $conn->query("SELECT * FROM draft_list where id = $draft_id");
+$draft = $draft->num_rows > 0 ? $draft->fetch_array() : array();
 $department = $conn->query("SELECT * FROM department where id = $department_id");
 $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 // $manager = $conn->query("SELECT *,concat(lastname,' ',firstname) as name FROM users where id = $manager_id");
@@ -31,6 +33,8 @@ $department = $department->num_rows > 0 ? $department->fetch_array() : array();
 					<div class="row">
 						<div class="col-sm-6">
 							<dl>
+								<dt><b class="border-bottom border-primary">Dự án</b></dt>
+								<dd><?php echo ucwords($draft['name']) ?></dd>
 								<dt><b class="border-bottom border-primary">Tên nhiệm vụ</b></dt>
 								<dd><?php echo ucwords($name) ?></dd>
 								<dt><b class="border-bottom border-primary">Tệp tin</b></dt>

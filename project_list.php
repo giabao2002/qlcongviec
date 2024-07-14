@@ -12,7 +12,8 @@
 			<table class="table tabe-hover table-condensed" id="list">
 				<colgroup>
 					<col width="5%">
-					<col width="35%">
+					<col width="20%">
+					<col width="15%">
 					<col width="15%">
 					<col width="15%">
 					<col width="20%">
@@ -22,6 +23,7 @@
 					<tr>
 						<th class="text-center">STT</th>
 						<th>Nhiệm vụ</th>
+						<th>Dự án</th>
 						<th>Ngày bắt đầu</th>
 						<th>Ngày hết hạn</th>
 						<th>Trạng thái</th>
@@ -35,7 +37,9 @@
 					$where = "";
 					if ($_SESSION['login_type'] == 3) {
 						$where = " where manager_id = '{$_SESSION['login_id']}' ";
-					} elseif ($_SESSION['login_type'] == 4) {
+					} elseif($_SESSION['login_type'] == 2) {
+						$where = " where director_id = '{$_SESSION['login_id']}' ";
+					}  elseif ($_SESSION['login_type'] == 4) {
 						$where = " where concat('[',REPLACE(user_ids,',','],['),']') LIKE '%[{$_SESSION['login_id']}]%' ";
 					}
 					$department_ids = array();
@@ -73,6 +77,12 @@
 								<td>
 									<p><b><?php echo ucwords($row['name']) ?></b></p>
 									<p class="truncate"><?php echo strip_tags($desc) ?></p>
+								</td>
+								<td>
+									<p><b><?php 
+										$draft = $conn->query("SELECT * FROM draft_list where id = {$row['draft_id']}")->fetch_array();
+										echo ucwords($draft['name'])
+									?></b></p>
 								</td>
 								<td><b><?php echo date("d/m/Y", strtotime($row['start_date'])) ?></b></td>
 								<td><b><?php echo date("d/m/Y", strtotime($row['end_date'])) ?></b></td>

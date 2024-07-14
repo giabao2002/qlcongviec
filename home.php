@@ -13,16 +13,6 @@ if ($_SESSION['login_type'] != 1)
   </div>
 </div>
 <hr>
-<?php
-
-$where = "";
-if ($_SESSION['login_type'] == 3) {
-  $where = " where manager_id = '{$_SESSION['login_id']}' ";
-} elseif ($_SESSION['login_type'] == 4) {
-  $where = " where concat('[',REPLACE(user_ids,',','],['),']') LIKE '%[{$_SESSION['login_id']}]%' ";
-}
-?>
-
 <div class="row">
   <div class="col-md-8">
     <div class="card card-outline card-success">
@@ -53,6 +43,8 @@ if ($_SESSION['login_type'] == 3) {
               $where = "";
               if ($_SESSION['login_type'] == 3) {
                 $where = " where manager_id = '{$_SESSION['login_id']}' ";
+              } elseif ($_SESSION['login_type'] == 2) {
+                $where = " where director_id = '{$_SESSION['login_id']}' ";
               } elseif ($_SESSION['login_type'] == 4) {
                 $where = " where concat('[',REPLACE(user_ids,',','],['),']') LIKE '%[{$_SESSION['login_id']}]%' ";
               }

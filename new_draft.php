@@ -4,20 +4,20 @@ if (!isset($conn)) {
 }
 include 'common.php';
 if (isset($filename)) {
-  $file_info_json = getFileInfo($filename, "assets/pdf/projects/");
+  $file_info_json = getFileInfo($filename, "assets/pdf/drafts/");
 }
 ?>
 
 <div class="col-lg-12">
   <div class="card card-outline card-primary">
     <div class="card-body">
-      <form action="" id="manage-project" enctype="multipart/form-data">
+      <form action="" id="manage-draft" enctype="multipart/form-data">
 
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="" class="control-label">Tên nhiệm vụ</label>
+              <label for="" class="control-label">Tên dự án</label>
               <input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>" required>
             </div>
           </div>
@@ -47,37 +47,27 @@ if (isset($filename)) {
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="" class="control-label">Dự án</label>
-              <select class="form-control form-control-sm select2" id="draft_id" name="draft_id" required>
-                <option></option>
-                <?php
-                $draft = $conn->query("SELECT * FROM draft_list WHERE director_id = {$_SESSION['login_id']}");
-                while ($row = $draft->fetch_assoc()) :
-                ?>
-                  <option value="<?php echo $row['id'] ?>" <?php echo isset($draft_id) && $draft_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['name']) ?></option>
-                <?php endwhile; ?>
-              </select>
+          <?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) : ?>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="" class="control-label">Lãnh đạo</label>
+                <select class="form-control form-control-sm select2" id="director_id" name="director_id" required>
+                  <option></option>
+                  <?php
+                  $director = $conn->query("SELECT * FROM users where type = 2");
+                  while ($row = $director->fetch_assoc()) :
+                  ?>
+                    <option value="<?php echo $row['id'] ?>" <?php echo isset($director_id) && $director_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['lastname'].' '.$row['firstname']) ?></option>
+                  <?php endwhile; ?>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="" class="control-label">Phòng ban</label>
-              <select class="form-control form-control-sm select2" id="department_id" name="department_id" required>
-                <option></option>
-                <?php
-                $department = $conn->query("SELECT * FROM department");
-                while ($row = $department->fetch_assoc()) :
-                ?>
-                  <option value="<?php echo $row['id'] ?>" <?php echo isset($department_id) && $department_id == $row['id'] ? "selected" : '' ?>><?php echo ucwords($row['name']) ?></option>
-                <?php endwhile; ?>
-              </select>
-            </div>
-          </div>
+          <?php else : ?>
+            <input type="hidden" name="director_id" value="<?php echo $_SESSION['login_id'] ?>">
+          <?php endif; ?>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-10">
             <div class="form-group">
               <label for="" class="control-label">Mô tả</label>
               <textarea name="description" id="" cols="30" rows="10" class="summernote form-control" required><?php echo isset($description) ? $description : '' ?></textarea>
@@ -85,7 +75,7 @@ if (isset($filename)) {
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-10">
             <div class="form-group">
               <label for="" class="control-label">Tệp đính kèm</label>
               <div class="custom-file">
@@ -100,8 +90,8 @@ if (isset($filename)) {
     </div>
     <div class="card-footer border-top border-info">
       <div class="d-flex w-100 justify-content-center align-items-center">
-        <button class="btn btn-flat  bg-gradient-primary mx-2" form="manage-project">Lưu</button>
-        <button class="btn btn-flat bg-gradient-secondary mx-2" type="button" onclick="location.href='index.php?page=project_list'">Hủy</button>
+        <button class="btn btn-flat  bg-gradient-primary mx-2" form="manage-draft">Lưu</button>
+        <button class="btn btn-flat bg-gradient-secondary mx-2" type="button" onclick="location.href='index.php?page=draft_list'">Hủy</button>
       </div>
     </div>
   </div>
@@ -134,7 +124,7 @@ if (isset($filename)) {
     renderPDF(selectedFiles);
   }
 
-  $('#manage-project').submit(function(e) {
+  $('#manage-draft').submit(function(e) {
     e.preventDefault()
     var form = $(this);
 
@@ -164,7 +154,7 @@ if (isset($filename)) {
 
 
       $.ajax({
-        url: 'ajax.php?action=save_project',
+        url: 'ajax.php?action=save_draft',
         data: formData,
         cache: false,
         contentType: false,
@@ -175,7 +165,7 @@ if (isset($filename)) {
           if (resp == 1) {
             alert_toast('Lưu dữ liệu thành công', "success");
             setTimeout(function() {
-              location.replace('index.php?page=project_list')
+              location.replace('index.php?page=draft_list')
             }, 1500)
           } else {
             alert_toast("Lưu dữ liệu không thành công", "error");

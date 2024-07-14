@@ -10,6 +10,33 @@
             </p>
           </a>
         </li>
+        <?php if ($_SESSION['login_type'] == 1 || $_SESSION['login_type'] == 2) : ?>
+          <li class="nav-item">
+            <a href="#" class="nav-link nav-edit_project nav-view_project">
+              <i class="nav-icon fas fa-file"></i>
+              <p>
+                Dự án
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <?php if ($_SESSION['login_type'] == 1) : ?>
+                <li class="nav-item">
+                  <a href="./index.php?page=new_draft" class="nav-link nav-draft_project tree-item">
+                    <i class="fas fa-angle-right nav-icon"></i>
+                    <p>Thêm</p>
+                  </a>
+                </li>
+              <?php endif ?>
+              <li class="nav-item">
+                <a href="./index.php?page=draft_list" class="nav-link nav-draft_list tree-item">
+                  <i class="fas fa-angle-right nav-icon"></i>
+                  <p>Danh sách</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+        <?php endif; ?>
         <li class="nav-item">
           <a href="#" class="nav-link nav-edit_project nav-view_project">
             <i class="nav-icon fas fa-layer-group"></i>
